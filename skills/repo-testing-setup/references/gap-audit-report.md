@@ -18,6 +18,7 @@ Use this report for the short path: an already-adopted repo, a request to audit 
 
 - Canonical full gate:
 - Fast hook lane:
+- Production build/build-smoke lane:
 - Hook framework and active verification:
 - Enforcement model:
 - Tooling matrix path:
