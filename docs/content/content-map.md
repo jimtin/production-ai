@@ -2,7 +2,7 @@
 
 The pipeline from repo artifacts to published content. Each row is one piece; the per-skill READMEs are the first drafts. Statuses: `ready` (source material complete in this repo), `partial` (needs material not yet public), `idea`.
 
-**Suggested sequence for Series 1:** open with #1, then #7 (full-app-review) — the orchestrator episode introduces the specialist cast and its findings table raises the question every later episode answers. #4 (test-readiness-preflight) follows #7 directly: the review diagnoses, the preflight is the working discipline. Remaining gate episodes in any order; IDs are stable, renumber freely at production time.
+**Suggested opening sequence (cross-series):** #1, then #7 (full-app-review — the orchestrator episode introduces the specialist cast), then #12 (pr-production-gate — the payoff: the machine that runs the entire suite, checks the threat model, and ships only what survives), then #4 (test-readiness-preflight — the working discipline behind every gate run). Remaining episodes in any order; IDs are stable, renumber freely at production time.
 
 ## Series 1 — Make your agent prove its work (the gates)
 
