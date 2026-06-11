@@ -44,7 +44,7 @@ If a lightweight pass uncovers a full-gate trigger, escalate to the full gate an
 
 Ask 3-7 questions per round when the problem is broad. Ask fewer questions when only one blocker remains. Do not bury the user in a giant questionnaire unless the scope is genuinely large.
 
-If three question rounds pass without convergence, stop open-ended questioning. Present the remaining unknowns as a decision menu — each option with a recommended default and the risk of accepting it — and ask the user to pick.
+There is no round limit. Keep questioning until the picture is clear — the gate ends when ambiguity is resolved or explicitly deferred, not when patience runs out. If one specific decision stalls (the user cannot answer, or answers keep circling), present that decision as a menu of options with a recommended default and the risk of each, get it decided or explicitly deferred, and continue questioning the rest.
 
 ## No User Available
 
