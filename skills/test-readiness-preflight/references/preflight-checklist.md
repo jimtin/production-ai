@@ -22,7 +22,7 @@ Use this checklist before starting the canonical full test gate. Mark an item cl
 - UI changes include responsive and visual checks through `$frontend-design-quality`.
 - Security-sensitive changes include `$security-threat-model` in the readiness plan.
 - Coverage thresholds are enforced by the repo's normal coverage command and no changed code is hidden from coverage.
-- If coverage has failed already, the failure has been classified as changed-scope gap, existing repo debt, mis-scoped denominator, command misuse, or host/container variance before stopping or reporting incomplete work.
+- If coverage has failed already, the failure has been classified and acted on per `coverage-failure-response.md` before stopping or reporting incomplete work.
 - Container-gated repos have coverage buffer above the required threshold before the expensive container lane starts.
 
 ## 3. Data and Migration Readiness
@@ -81,13 +81,14 @@ Use this checklist before starting the canonical full test gate. Mark an item cl
 - Dependency audit is planned or complete.
 - Image/container scan is planned when runtime containers changed.
 - `$security-threat-model` is planned or complete before any push.
-- Vercel work uses local non-deploying validation and leaves production deployment to GitHub `main` unless the user explicitly approves break-glass deployment.
-- If Vercel production validation depends on encrypted env values that cannot be pulled/decrypted locally, record it as remote-only validation after all non-secret local gates pass. Do not repeatedly retry `vercel pull`, attempt to extract secrets, paste secrets into local env files, bypass env checks, or pursue local prebuilt production deployment as the workaround.
+- Deployment-platform work (e.g. Vercel) uses local non-deploying validation and leaves production deployment to the git integration unless the user explicitly approves break-glass deployment.
+- If production validation depends on platform-encrypted env values that cannot be pulled or decrypted locally (e.g. Vercel), record it as remote-only validation after all non-secret local gates pass. Do not repeatedly retry pulls, attempt to extract secrets, paste secrets into local env files, bypass env checks, or pursue local prebuilt production deployment as the workaround.
 
 ## 9. Ready-to-Test Output
 
 Before starting full validation, report:
 
+- Verdict: `READY`, `CONDITIONAL`, or `BLOCKED`.
 - Blockers found and fixed.
 - Blockers that remain and why.
 - New or updated tests added for the changed code.
