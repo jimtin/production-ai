@@ -36,6 +36,7 @@ graph TD
     FAR --> FDP
     FAR --> TRP
     FAR --> STM
+    FAR --> UAC
     FAR --> CPR
     FAR --> NVA
     FAR --> ELI

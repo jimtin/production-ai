@@ -20,13 +20,13 @@ Use this matrix before conclusions. Each row needs evidence, status, severity wh
 | Frontend quality | existing patterns, click count, viewport fill, responsive behavior, portals, clutter, visual states, overflow | component paths, screenshots/tests, CSS/layout risks | `$frontend-design-quality` |
 | Unit coverage | current thresholds, changed/high-risk files, helpers/hooks/services | coverage config, reports, test files | `$test-readiness-preflight` |
 | Integration coverage | API routes, persistence, providers, permissions, workflow orchestration | integration test inventory, fixtures, DB setup | `$test-readiness-preflight` |
-| Browser/E2E coverage | user actions, routes, roles, mutations, responsive and visual checks | Playwright/Cypress specs, screenshots, traces | `$frontend-design-quality`, `$test-readiness-preflight` |
+| Browser/E2E coverage | user actions, routes, roles, mutations, responsive and visual checks | `$user-action-coverage-review` action matrix, Playwright/Cypress specs, screenshots, traces | `$user-action-coverage-review`, `$frontend-design-quality`, `$test-readiness-preflight` |
 | Test isolation | seeds, test doubles, local DBs, cleanup, deterministic provider behavior | setup files, compose files, fixtures | `$test-readiness-preflight` |
 | Security | trust boundaries, auth/authz, secrets, uploads, parsers, webhooks, admin surfaces, deployment scripts | threat model notes, sensitive routes, secret scan posture | `$security-threat-model` |
 | Observability | client/server/runtime errors, log hygiene, privacy, alerting, monitoring evidence, runbooks | error boundaries, logger, Sentry/OTel/Vercel config | `references/observability-checklist.md` |
 | Analytics | pageviews, typed events, no-PII payload rules, frontend/backend event linkage | analytics modules, event schemas, tests | `$nextjs-vercel-analytics` when applicable |
 | Dependencies | latest stable posture, lockfile health, audit scripts, risky package classes | manifests, lockfiles, audit command | none |
-| Deployment | GitHub/Vercel policy, local-first gates, DB migration sequence, env boundaries, CI spend | workflows, vercel config, scripts, migration tooling | `$test-readiness-preflight`, `$security-threat-model` |
+| Deployment | git-integration deploy policy (e.g. GitHub/Vercel), local-first gates, DB migration sequence, env boundaries, CI spend | workflows, platform config, scripts, migration tooling | `$test-readiness-preflight`, `$security-threat-model` |
 | Code pruning | superseded providers, dead routes, old env vars, compatibility layers, stale scripts/tests/docs | references, imports, configs, runtime usage evidence | `$codebase-prune-review` |
 | Local validation readiness | canonical local/container gate, cheap targeted checks, blockers before full gate | scripts, Docker files, browser setup, migration state | `$test-readiness-preflight` |
 
@@ -39,6 +39,8 @@ Use this matrix before conclusions. Each row needs evidence, status, severity wh
 - For unknown legacy paths, classify them as `unknown` until references, tests, runtime config, logs, or user confirmation prove their status.
 
 ## Severity Hints
+
+Examples only — the definitions and the overall-status derivation rule live in `SKILL.md`.
 
 - `blocking`: missing migration before dependent code, auth bypass, secret exposure, no required local gate before push, critical user flow without E2E coverage, production-only runtime error with no safe release path.
 - `high`: weak authz coverage, unsafe upload/parser handling, no server error capture on critical mutations, fragile deployment path, major provider migration leftovers.
