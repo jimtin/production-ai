@@ -17,6 +17,8 @@ Use after plan acceptance and before implementation for substantial user-facing 
 - frontend changes covered by `$frontend-design-quality`
 - release-readiness work where user workflows or critical paths are in scope
 
+The `$clarify-before-build` exit hands off here: a confirmed Shared Understanding Contract for substantial user-facing work names this skill as the first post-confirmation step, and the action matrix becomes the contract's acceptance-criteria evidence.
+
 Rerun before final validation if implementation scope changes, if a user action is added or removed, or if tests are rewritten.
 
 ## Workflow

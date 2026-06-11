@@ -78,10 +78,18 @@ Use this bank selectively. Ask the highest-impact questions for the current plan
 - What cleanup or migration verification is required?
 - What happens if the rollout fails halfway?
 
+## Cost and Limits
+
+- What does this cost to run: provider calls, storage, compute, email/SMS, LLM tokens?
+- Which provider plan tiers or entitlements does the design assume, and are they actually active?
+- What quotas, rate limits, or spend caps bound the design?
+- At what usage level does the design need to change, and is that acceptable for now?
+
 ## Sequencing
 
 - What must be decided before code starts?
 - What can be implemented independently?
+- What work can run in parallel lanes with disjoint file ownership, and what stays on the critical path?
 - What is the smallest safe delivery slice?
 - What must be validated before the next slice begins?
 - What follow-up work is acceptable, and who owns it?
