@@ -31,6 +31,7 @@ The pipeline from repo artifacts to published content. Each row is one piece; th
 | 17 | **Threat-model your own automations** — your agent tooling is attack surface | threat-model files in skills + patterns docs | post | ready |
 | 18 | **How to publish your agent setup without leaking your life** — the fail-closed privacy pipeline | [privacy-scan.sh](../../scripts/privacy-scan.sh), this repo's own story | post | ready |
 | 20 | **I let my agent update my laptop every day** — with a strict do-not-touch list | [laptop-currency-maintenance](../../skills/laptop-currency-maintenance/) | post + video | ready |
+| 21 | **Anatomy of a learning-loop summary** — what your agent's nightly self-report actually says | [learning-loop-summary-example](../patterns/learning-loop-summary-example.md) | post | ready |
 
 ## Backlog / needs work before publishable
 
@@ -38,7 +39,6 @@ The pipeline from repo artifacts to published content. Each row is one piece; th
 |---|---|
 | Case study: a research-report skill with evidence caching, URL revalidation, and tested rendering | Source skill is business-domain; needs a generic rebuild with synthetic fixtures |
 | ChatOps for your gates: a channel-bound review-trigger bot | Bot repo is private; needs extraction into a template |
-| Anatomy of a real learning-loop summary, line by line | Wants a fabricated-but-realistic example summary |
 
 ## Per-piece checklist
 

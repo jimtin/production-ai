@@ -26,17 +26,19 @@ session transcripts (local JSONL)
   commit + push (fail closed) ──► chat notification with report paths
 ```
 
-A real run produces summaries like:
+A run produces summaries like this (numbers illustrative):
 
 | Pattern | Occurrences | Sessions | Action |
 |---|---:|---:|---|
-| Frontend visual verification gaps | 2085 | 19 | eligible for safe update |
-| Missed parallelization opportunity | 1217 | 13 | proposal only |
-| Schema and release sequencing risk | 756 | 12 | eligible for safe update |
-| Coverage failure treated as stop condition | 299 | 7 | eligible for safe update |
-| Secret scanning ran against the wrong scope | 3 | 1 | watch |
+| Frontend visual verification gaps | 1418 | 16 | eligible for safe update |
+| Missed parallelization opportunity | 388 | 11 | proposal only |
+| Schema and release sequencing risk | 415 | 7 | eligible for safe update |
+| Coverage failure treated as stop condition | 173 | 5 | eligible for safe update |
+| Secret scanning ran against the wrong scope | 2 | 1 | watch |
 
-Each high-frequency pattern is a skill gap with receipts. "Coverage failure treated as stop condition" appearing 299 times across 7 sessions is exactly how the coverage-failure-response reference in [test-readiness-preflight](../../skills/test-readiness-preflight/) earned its existence.
+A complete fabricated example — every section annotated, line by line — is in [learning-loop-summary-example.md](learning-loop-summary-example.md).
+
+Each high-frequency pattern is a skill gap with receipts. "Coverage failure treated as stop condition" showing up hundreds of times across a week of sessions is exactly how the coverage-failure-response reference in [test-readiness-preflight](../../skills/test-readiness-preflight/) earned its existence.
 
 ## The safety rails
 
