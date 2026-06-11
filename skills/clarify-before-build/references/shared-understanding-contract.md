@@ -41,6 +41,7 @@ Use this structure before implementation starts. Keep it concise, but do not omi
 - Unit tests:
 - Integration tests:
 - Browser/E2E tests:
+- User-action coverage matrix (`$user-action-coverage-review`):
 - `$frontend-design-quality` checks:
 - Visual/responsive screenshots:
 - Local container gate:
@@ -55,11 +56,19 @@ Use this structure before implementation starts. Keep it concise, but do not omi
 - Risk:
   Mitigation:
 
+## Parallel Work
+
+- Decision: parallel lanes / not applicable because:
+- Lane:
+  Ownership boundary (files/dirs):
+  Expected evidence:
+
 ## Open Items
 
 - Answered:
 - Deferred with user approval:
 - Assumptions accepted:
+- Unvalidated (no user response — contract is DRAFT):
 
 ## Implementation Sequence
 

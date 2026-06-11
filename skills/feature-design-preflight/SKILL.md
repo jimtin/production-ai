@@ -1,6 +1,6 @@
 ---
 name: feature-design-preflight
-description: Tool-agnostic feature design preflight that traces a requirement through production constraints, dependencies, user and system flows, edge cases, security, operations, and tests before implementation. Use before implementing nontrivial features or integrations, especially uploads, media or video, PDFs or documents, file parsing, third-party APIs, long-running operations, background jobs, data migrations, auth or permissions, payments, admin or user portal workflows, AI calls, storage, or any request where a naive implementation could satisfy a surface requirement but fail in real use. Use when Codex must stop and clarify if requirements, provider limits, library choices, failure behavior, or verification are unclear.
+description: Tool-agnostic feature design preflight that traces a requirement through production constraints, dependencies, user and system flows, edge cases, security, operations, and tests before implementation. Use before implementing nontrivial features or integrations, especially uploads, media or video, PDFs or documents, file parsing, third-party APIs, long-running operations, background jobs, data migrations, auth or permissions, payments, admin or user portal workflows, AI calls, storage, or any request where a naive implementation could satisfy a surface requirement but fail in real use. Use when the agent must stop and clarify if requirements, provider limits, library choices, failure behavior, or verification are unclear.
 ---
 
 # Feature Design Preflight
