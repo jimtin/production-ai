@@ -24,7 +24,7 @@ This skill makes removal a proof exercise: map live behavior first, classify eve
 ## Install
 
 ```bash
-cp -R skills/codebase-prune-review ~/.codex/skills/
+scripts/install-skill.sh codebase-prune-review
 ```
 
 Triggers on removing old providers/integrations, legacy cleanup, dead-code review, post-migration cleanup, attack-surface reduction.

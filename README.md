@@ -8,27 +8,27 @@ The core idea: coding agents optimize for *looks done*. Left alone, they will wr
 
 ## The library
 
-Each skill is a self-contained directory under [skills/](skills/) with two layers:
+Each skill has two layers:
 
-- `SKILL.md` — the machine layer. Loaded by the agent when the skill triggers.
-- `README.md` — the human layer. Why the skill exists, the failure it prevents, and how to adapt it.
+- `skills/<name>/` — the clean installable payload loaded by the agent when the skill triggers.
+- `docs/skills/<name>.md` — the public human guide: why the skill exists, the failure it prevents, and how to adapt it.
 
-| Skill | Kind | The failure it prevents |
-|---|---|---|
-| [clarify-before-build](skills/clarify-before-build/) | Planning gate | Building from a spec that is still vibes |
-| [feature-design-preflight](skills/feature-design-preflight/) | Design gate | The demo that works until real traffic, real files, and real failure modes arrive |
-| [user-action-coverage-review](skills/user-action-coverage-review/) | Coverage gate | Shipped buttons nobody can prove still work |
-| [frontend-design-quality](skills/frontend-design-quality/) | Quality gate | "Done" at one viewport, broken at the other six |
-| [test-readiness-preflight](skills/test-readiness-preflight/) | Validation preflight | Burning a 20-minute test gate on a 20-second predictable failure |
-| [full-app-review](skills/full-app-review/) | Review orchestrator | "Review my app" meaning something different every time you ask |
-| [codebase-prune-review](skills/codebase-prune-review/) | Removal gate | Deleting live behavior along with the dead code |
-| [error-logging-instrumentation](skills/error-logging-instrumentation/) | Observability review | Production failures an operator cannot debug at 2am |
-| [repo-technical-documentation](skills/repo-technical-documentation/) | Documentation engine | Docs that assert confidently instead of admitting what is unknown |
-| [nextjs-vercel-analytics](skills/nextjs-vercel-analytics/) | Implementation guide | Analytics instrumentation that quietly ships PII |
-| [pr-production-gate](skills/pr-production-gate/) | Deployment gate | Unproven code reaching production because CI was green-ish |
-| [security-threat-model](skills/security-threat-model/) | Security gate | "Security reviews" that are checklist dumps untraceable to your code |
-| [repo-testing-setup](skills/repo-testing-setup/) | Foundation gate | Implementation starting on a repo that cannot prove itself — host-run tests, no canonical gate, no security scanning |
-| [laptop-currency-maintenance](skills/laptop-currency-maintenance/) | Ops automation | Machine drift breaking builds — or auto-updates breaking the machine |
+| Skill | Kind | Guide | Payload |
+|---|---|---|---|
+| clarify-before-build | Planning gate | [guide](docs/skills/clarify-before-build.md) | [payload](skills/clarify-before-build/) |
+| feature-design-preflight | Design gate | [guide](docs/skills/feature-design-preflight.md) | [payload](skills/feature-design-preflight/) |
+| user-action-coverage-review | Coverage gate | [guide](docs/skills/user-action-coverage-review.md) | [payload](skills/user-action-coverage-review/) |
+| frontend-design-quality | Quality gate | [guide](docs/skills/frontend-design-quality.md) | [payload](skills/frontend-design-quality/) |
+| test-readiness-preflight | Validation preflight | [guide](docs/skills/test-readiness-preflight.md) | [payload](skills/test-readiness-preflight/) |
+| full-app-review | Review orchestrator | [guide](docs/skills/full-app-review.md) | [payload](skills/full-app-review/) |
+| codebase-prune-review | Removal gate | [guide](docs/skills/codebase-prune-review.md) | [payload](skills/codebase-prune-review/) |
+| error-logging-instrumentation | Observability review | [guide](docs/skills/error-logging-instrumentation.md) | [payload](skills/error-logging-instrumentation/) |
+| repo-technical-documentation | Documentation engine | [guide](docs/skills/repo-technical-documentation.md) | [payload](skills/repo-technical-documentation/) |
+| nextjs-vercel-analytics | Implementation guide | [guide](docs/skills/nextjs-vercel-analytics.md) | [payload](skills/nextjs-vercel-analytics/) |
+| pr-production-gate | Deployment gate | [guide](docs/skills/pr-production-gate.md) | [payload](skills/pr-production-gate/) |
+| security-threat-model | Security gate | [guide](docs/skills/security-threat-model.md) | [payload](skills/security-threat-model/) |
+| repo-testing-setup | Foundation gate | [guide](docs/skills/repo-testing-setup.md) | [payload](skills/repo-testing-setup/) |
+| laptop-currency-maintenance | Ops automation | [guide](docs/skills/laptop-currency-maintenance.md) | [payload](skills/laptop-currency-maintenance/) |
 
 ## The patterns
 
@@ -47,7 +47,8 @@ Install a skill into Codex CLI:
 
 ```bash
 git clone https://github.com/jimtin/production-ai.git
-cp -R production-ai/skills/clarify-before-build ~/.codex/skills/
+cd production-ai
+scripts/install-skill.sh clarify-before-build
 ```
 
 Then ask your agent to plan something substantial — the skill triggers on planning requests, or invoke it directly with `$clarify-before-build`.
@@ -63,7 +64,7 @@ Then edit it down: delete every rule you cannot or will not enforce. A constitut
 Validate the library (used by CI on every push):
 
 ```bash
-./scripts/validate.sh        # structure: frontmatter, references, README layers
+./scripts/validate.sh        # structure: frontmatter, references, docs, clean payloads
 ./scripts/privacy-scan.sh    # denylist sweep + gitleaks, fail closed
 ```
 
@@ -87,7 +88,7 @@ The privacy guarantee is structural, not a one-time cleanup: [CI runs a fail-clo
 
 ## Creating content from this repo
 
-The [content map](docs/content/content-map.md) tracks which artifacts are ready to become posts, videos, or talks, with the hook for each. The [glossary](docs/content/glossary.md) keeps terminology consistent across pieces. Each skill README is structured to be the first draft of its own article.
+The [content map](docs/content/content-map.md) tracks which artifacts are ready to become posts, videos, or talks, with the hook for each. The [glossary](docs/content/glossary.md) keeps terminology consistent across pieces. Each [skill guide](docs/skills/) is structured to be the first draft of its own article.
 
 ## License
 

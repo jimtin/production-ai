@@ -24,7 +24,7 @@ This skill gives "full review" a fixed, repeatable meaning: an evidence-backed r
 ## Install
 
 ```bash
-cp -R skills/full-app-review ~/.codex/skills/
+scripts/install-skill.sh full-app-review
 ```
 
 Triggers on "fully review this app/repo", production-readiness reviews, comprehensive audits. Single-dimension requests route to the relevant specialist directly.

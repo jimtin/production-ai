@@ -28,7 +28,7 @@ A mandatory cheap pass before full-suite/container/E2E/push validation, ending i
 ## Install
 
 ```bash
-cp -R skills/test-readiness-preflight ~/.codex/skills/
+scripts/install-skill.sh test-readiness-preflight
 ```
 
 Triggers before full verification or push-readiness, and after substantial implementation.

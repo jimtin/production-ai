@@ -29,7 +29,7 @@ Produces an **implementation readiness note** with an explicit status — `READY
 
 ## The domain checklists
 
-The skill's deep-knowledge layer ([references/domain-checklists.md](references/domain-checklists.md)) holds eight sections of distilled "what goes wrong in this kind of feature" — loaded only when the feature being designed actually touches that domain. Every line is a production incident written down, and every section ends in tests with hostile fixtures.
+The skill's deep-knowledge layer ([references/domain-checklists.md](../../skills/feature-design-preflight/references/domain-checklists.md)) holds eight sections of distilled "what goes wrong in this kind of feature" — loaded only when the feature being designed actually touches that domain. Every line is a production incident written down, and every section ends in tests with hostile fixtures.
 
 | Domain | The questions it forces |
 |---|---|
@@ -45,7 +45,7 @@ The skill's deep-knowledge layer ([references/domain-checklists.md](references/d
 ## Install
 
 ```bash
-cp -R skills/feature-design-preflight ~/.codex/skills/
+scripts/install-skill.sh feature-design-preflight
 ```
 
 Triggers before nontrivial features — uploads, media, documents, third-party APIs, long-running jobs, migrations, auth, payments, AI calls, portals.

@@ -1,6 +1,6 @@
 # Repo Testing Artifact Templates
 
-Use these committed paths unless the repo already has a stricter convention. If a different path is chosen, record the reason in `docs/testing/repo-testing-design.md`.
+Use these repo-tracked paths unless the repo already has a stricter convention. If a different path is chosen, record the reason in `docs/testing/repo-testing-design.md`.
 
 ## Required Files
 

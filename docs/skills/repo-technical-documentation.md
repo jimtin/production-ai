@@ -25,7 +25,7 @@ Exhaustively documents a repo's technical reality — API endpoints, UI routes, 
 ## Install
 
 ```bash
-cp -R skills/repo-technical-documentation ~/.codex/skills/
+scripts/install-skill.sh repo-technical-documentation
 ```
 
 Triggers on "document this repo", architecture doc requests, stale-doc reconciliation, repo-map refreshes.

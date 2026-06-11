@@ -23,7 +23,7 @@ This skill implements Vercel Web Analytics in Next.js behind a typed, no-PII eve
 ## Install
 
 ```bash
-cp -R skills/nextjs-vercel-analytics ~/.codex/skills/
+scripts/install-skill.sh nextjs-vercel-analytics
 ```
 
 Triggers on adding/reviewing/fixing Vercel Web Analytics, custom events, funnel tracking, analytics privacy in Next.js.

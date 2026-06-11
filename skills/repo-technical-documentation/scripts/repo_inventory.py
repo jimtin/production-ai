@@ -605,7 +605,7 @@ def build_inventory(root: Path, max_bytes: int) -> dict[str, Any]:
 
     return {
         "schema_version": 1,
-        "inventory_command": "skills/repo-technical-documentation/scripts/repo_inventory.py <repo> --format json",
+        "inventory_command": "<skill-dir>/scripts/repo_inventory.py <repo> --format json",
         "repo_root": str(root),
         "tracked_file_count": len(tracked_files),
         "files": files,

@@ -19,22 +19,22 @@ The third stage of the build pipeline: `$clarify-before-build` agrees *what*, `$
 
 - **Containerization is non-negotiable, structurally.** A setup that leaves any lane host-only cannot reach `adopted` — host results are never canonical proof, on any machine, including yours.
 - **Testing scope only.** It has no opinions about your folder layout or package structure. How the repo is organized is the repo's business; how it proves itself is this skill's business.
-- **Design → confirm → execute.** The Repo Testing Design is a reviewable artifact (committed to the repo, like every plan in this library) and an explicit checkpoint — the skill rewires what runs on every commit, which is not something to do on a draft.
+- **Design → confirm → execute.** The Repo Testing Design is a reviewable repo artifact and an explicit checkpoint — the skill rewires what runs on every commit, which is not something to do on a draft.
 - **Local proof is canonical; CI never re-runs it.** GitHub is transport. Remote-only boundaries (like provider-managed encrypted secrets) get documented, not worked around.
 - **The enforcement model is declared in writing.** Hook-owned proof (full pre-push) or gate-owned proof (slim hooks, the PR gate re-proves the exact SHA) — exactly one, in the tooling matrix.
 - **Gate-owned proof is a first-class model.** When a parent or repo contract says a standalone gate owns exact-SHA proof, developer hooks stay slim and deterministic instead of duplicating the full gate before every push.
-- **Hooks are proven, not just installed.** Layer 4's verification includes committing a deliberate violation to watch the hook actually block it.
+- **Hooks are proven, not just installed.** Layer 4's verification includes a deliberate violation to watch the hook actually block it.
 - **Security setup is testing setup.** Repo-scoped containerized gitleaks, dependency audits, vulnerability scans — wired in the same pass, and the setup change itself gets a `$security-threat-model` look, because hook and CI/CD rewiring is attack surface.
 - **Production build is a proof lane.** Buildable/runtime repos need a containerized production build or build-smoke check, not just tests and audits.
-- **Artifacts have predictable names.** The skill commits `docs/testing/repo-testing-design.md`, `tooling-matrix.md`, `critical-path-inventory.md`, `e2e-workflow-inventory.md`, and `adoption-report.md` unless the repo already has a stricter convention.
+- **Artifacts have predictable names.** The skill writes `docs/testing/repo-testing-design.md`, `tooling-matrix.md`, `critical-path-inventory.md`, `e2e-workflow-inventory.md`, and `adoption-report.md` unless the repo already has a stricter convention.
 - **Tool versions and flakes are part of proof.** Runner/scanner versions are pinned or exceptions are documented; retry-until-green is not accepted proof, and quarantines need expiry, owner, and tracking.
-- **It tells the agents what it built.** The final layer writes the repo-local agent contract — `AGENTS.md` (merged into `CLAUDE.md` for Claude Code) recording the canonical command, enforcement model, and container-only rule — and commits the workflow inventories as repo truth. Hooks enforce; the contract explains; the inventories inform. A rule the contract names must actually exist: no aspirational lines.
+- **It tells the agents what it built.** The final layer writes the repo-local agent contract — `AGENTS.md` (merged into `CLAUDE.md` for Claude Code) recording the canonical command, enforcement model, and container-only rule — and records the workflow inventories as repo truth. Hooks enforce; the contract explains; the inventories inform. A rule the contract names must actually exist: no aspirational lines.
 - **It closes the graph's last dead end.** `$test-readiness-preflight`'s "repo has no canonical gate" blocker now escalates here instead of stopping; the PR gate requires adoption before a repo joins its config.
 
 ## Install
 
 ```bash
-cp -R skills/repo-testing-setup ~/.codex/skills/
+scripts/install-skill.sh repo-testing-setup
 ```
 
 Triggers on "design the testing approach," "containerize the tests," "set up security scanning," "this repo has no verify command" — or the short path, "audit this repo against the validation standard."

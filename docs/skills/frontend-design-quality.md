@@ -25,7 +25,7 @@ A quality bar for building, changing, or reviewing UI:
 ## Install
 
 ```bash
-cp -R skills/frontend-design-quality ~/.codex/skills/
+scripts/install-skill.sh frontend-design-quality
 ```
 
 Triggers on UI build/change/review work; other skills pull it in for any plan that touches frontend.

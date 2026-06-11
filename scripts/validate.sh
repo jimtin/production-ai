@@ -3,7 +3,9 @@
 #   - SKILL.md exists with YAML frontmatter (name, description)
 #   - frontmatter name matches the directory name
 #   - description is non-empty and within the 1024-char skill-description budget
-#   - README.md (human/content layer) exists
+#   - no README.md exists in the installable payload
+#   - docs/skills/<name>.md exists as the human/content layer
+#   - agents/openai.yaml exists with interface metadata
 #   - every references/... path mentioned in SKILL.md exists on disk
 set -euo pipefail
 
@@ -16,6 +18,7 @@ from pathlib import Path
 
 root = Path(sys.argv[1])
 skills_dir = root / "skills"
+skill_docs_dir = root / "docs" / "skills"
 errors: list[str] = []
 
 
@@ -52,15 +55,39 @@ for skill in sorted(p for p in skills_dir.iterdir() if p.is_dir()):
         errors.append(f"{label}: frontmatter missing 'description'")
     elif len(description) > 1024:
         errors.append(f"{label}: description is {len(description)} chars (max 1024)")
-    if not (skill / "README.md").exists():
-        errors.append(f"{label}: missing README.md (human/content layer)")
+    if (skill / "README.md").exists():
+        errors.append(f"{label}: README.md belongs in docs/skills/{skill.name}.md, not the installable payload")
+    if not (skill_docs_dir / f"{skill.name}.md").exists():
+        errors.append(f"{label}: missing docs/skills/{skill.name}.md (human/content layer)")
+    openai_yaml = skill / "agents" / "openai.yaml"
+    if not openai_yaml.exists():
+        errors.append(f"{label}: missing agents/openai.yaml")
+    else:
+        metadata = openai_yaml.read_text()
+        for needle in ("interface:", "display_name:", "short_description:", "default_prompt:"):
+            if needle not in metadata:
+                errors.append(f"{label}: agents/openai.yaml missing '{needle}'")
     for ref in sorted(set(re.findall(r"(?:references|scripts)/[A-Za-z0-9_\-./]+\.(?:md|py|json|sh)", text))):
         if not (skill / ref).exists():
             errors.append(f"{label}: SKILL.md mentions '{ref}' but the file does not exist")
 
-for required in ("README.md", "LICENSE", "templates/AGENTS-workspace-template.md", "templates/SKILL-template.md"):
+for required in ("README.md", "LICENSE", "docs/skills/README.md", "scripts/install-skill.sh", "templates/AGENTS-workspace-template.md", "templates/SKILL-template.md"):
     if not (root / required).exists():
         errors.append(f"repo: missing {required}")
+
+for doc in sorted(skill_docs_dir.glob("*.md")):
+    if doc.name == "README.md":
+        continue
+    if not (skills_dir / doc.stem / "SKILL.md").exists():
+        errors.append(f"docs/skills/{doc.name}: no matching skills/{doc.stem}/SKILL.md")
+
+raw_install_pattern = re.compile(r"cp\s+-R\s+(?:\S*/)?skills/[A-Za-z0-9_-]+")
+for path in sorted(root.rglob("*.md")):
+    if any(part in {".git", "node_modules"} for part in path.relative_to(root).parts):
+        continue
+    text = path.read_text()
+    if raw_install_pattern.search(text):
+        errors.append(f"{path.relative_to(root)}: use scripts/install-skill.sh instead of raw cp -R skills/<name>")
 
 if errors:
     print("Validation FAILED:")

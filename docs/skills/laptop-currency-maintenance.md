@@ -36,12 +36,12 @@ node laptop-currency-maintenance.mjs update --dry-run
 - **Repos are read-only territory.** Dependency drift gets *reported with evidence*; mutation requires a human starting a repo-scoped task with the full gate treatment. Machine maintenance never silently becomes repo maintenance.
 - **Dirty/active repo detection.** The repo scan flags repos with uncommitted changes or running dev processes, so even recommendations carry "don't touch this one right now" context.
 - **Redaction before any sink.** Reports and chat posts pass through a tested sanitizer (tokens, bearer headers, provider IDs, emails, secret-shaped assignments) — the same pattern as the [learning loop](../../docs/patterns/learning-loop.md).
-- **It ships its own threat model.** [laptop-currency-maintenance-threat-model.md](laptop-currency-maintenance-threat-model.md) — an automation that runs daily with your shell and a bot token is attack surface, and is modeled as one.
+- **It ships its own threat model.** [laptop-currency-maintenance-threat-model.md](../../skills/laptop-currency-maintenance/laptop-currency-maintenance-threat-model.md) — an automation that runs daily with your shell and a bot token is attack surface, and is modeled as one.
 
 ## Install
 
 ```bash
-cp -R skills/laptop-currency-maintenance ~/.codex/skills/
+scripts/install-skill.sh laptop-currency-maintenance
 ```
 
 Schedule the daily run with your harness's automation (see [templates/automation.toml.example](../../templates/automation.toml.example)) or plain cron.

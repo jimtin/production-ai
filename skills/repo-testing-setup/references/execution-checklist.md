@@ -42,19 +42,19 @@ Run only from a `CONFIRMED` design. Execute in order; verify each layer with its
 
 ## Layer 6 — Stubs, fakes, seeds
 
-- Deterministic test doubles for every provider in the design; seed/reset commands that rebuild from committed migrations alone.
+- Deterministic test doubles for every provider in the design; seed/reset commands that rebuild from checked-in migrations alone.
 - Verify: integration and E2E lanes pass against stubs with no network egress to live providers.
 
 ## Layer 7 — Deployment branch policy
 
 - Platform config restricting production deploys to the git integration; branch classes per the enforcement model.
-- Verify: config is committed; a non-production branch cannot reach production by policy.
+- Verify: config is present in the intended repo change set; a non-production branch cannot reach production by policy.
 
 ## Layer 8 — Bounded runners and artifacts
 
 - Timeouts, stall detection, heartbeats on long lanes; stable artifact paths; generated output ignored by git.
 - Define the flake policy: retry-until-green is not accepted proof; quarantines need expiry, owner, tracking reference, and must not guard deploy lanes.
-- Verify: a full run leaves the tree clean (`git status` empty apart from intended commits).
+- Verify: a full run leaves the tree clean (`git status` empty apart from intended changes).
 
 ## Layer 9 — Agent contract
 
@@ -68,12 +68,12 @@ Run only from a `CONFIRMED` design. Execute in order; verify each layer with its
 2. Production build/build-smoke lane green in containers, or explicitly `not-applicable` with the design reason.
 3. Full canonical gate green, in containers, end to end.
 4. Acceptance ledger and test ledger reconciled: every row is `verified`, `blocked`, or explicitly deferred in the design exceptions.
-5. Tooling matrix, design document, workflow inventories, adoption report, and the agent contract committed to the repo.
+5. Tooling matrix, design document, workflow inventories, adoption report, and the agent contract are present as repo-tracked files in the change set.
 6. Verdict declared: `adopted` or `adopted-with-exceptions` (with the exceptions/deferred-items section of the design filled in).
 
 ## Hand-offs
 
 - `$test-readiness-preflight` now preflights against the new canonical gate, and agents landing in the repo read the contract that explains it.
-- `$user-action-coverage-review` builds its matrix from the committed workflow inventories instead of re-deriving them.
+- `$user-action-coverage-review` builds its matrix from the repo-tracked workflow inventories instead of re-deriving them.
 - `$pr-production-gate` may add the repo to its configuration.
 - Any deferred item from the design's exceptions section becomes scheduled work, not a silent gap.

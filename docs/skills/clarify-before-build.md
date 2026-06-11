@@ -27,7 +27,7 @@ Turns planning requests into a question-led gate. The agent must:
 ## Install
 
 ```bash
-cp -R skills/clarify-before-build ~/.codex/skills/
+scripts/install-skill.sh clarify-before-build
 ```
 
 Triggers on plan/roadmap/design/architecture requests, or directly: *"Use `$clarify-before-build` to plan this feature."*

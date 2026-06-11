@@ -23,7 +23,7 @@ This skill audits (and on request, fixes) error logging against one standard: *c
 ## Install
 
 ```bash
-cp -R skills/error-logging-instrumentation ~/.codex/skills/
+scripts/install-skill.sh error-logging-instrumentation
 ```
 
 Triggers on audit/add/fix/harden requests for logging, error capture, observability, error boundaries, production debuggability.

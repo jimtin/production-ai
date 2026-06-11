@@ -1,0 +1,4 @@
+interface:
+  display_name: "User Action Coverage Review"
+  short_description: "Map user actions to test evidence"
+  default_prompt: "Use $user-action-coverage-review to map the changed user actions, roles, states, and mutations to browser, integration, and unit evidence before implementation."

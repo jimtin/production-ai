@@ -12,22 +12,22 @@ Builds and writes `<target>-threat-model.md` for a repo, subsystem, or automatio
 2. Trust boundaries as concrete edges (protections observed, gaps) and the assets that drive risk.
 3. An attacker profile with **capabilities and non-capabilities** — the severity-inflation guard.
 4. A short list of real abuse paths, classified (`access / exfiltration / integrity / execution / availability / detection-evasion`) and prioritized by justified likelihood × impact, adjusted for evidenced controls.
-5. A pause to validate ranking-critical assumptions with you before priorities are final.
+5. Interactive assumption validation when a user is available, or explicit `unvalidated` assumptions in headless gate runs.
 6. Mitigations in two never-merged lists: existing (with evidence) and recommended (with a location and control type).
 
 ## The design choices worth stealing
 
-- **Evidence tags on architecture claims.** The same `confirmed / inferred / unknown` discipline as [repo-technical-documentation](../repo-technical-documentation/) — inferred architecture can't masquerade as fact, which is where most wrong threat models start.
+- **Evidence tags on architecture claims.** The same `confirmed / inferred / unknown` discipline as [repo-technical-documentation](repo-technical-documentation.md) — inferred architecture can't masquerade as fact, which is where most wrong threat models start.
 - **Non-capabilities are part of the model.** Writing down what the attacker *can't* do is what keeps a single-tenant internal tool from collecting ten "critical" findings written for a public multi-tenant SaaS.
 - **Runtime ≠ CI ≠ dev.** Three surfaces, three different attackers, three blast radii — modeled separately instead of smeared together.
-- **The assumption-validation pause.** Ranking-critical assumptions go to the user as 1–3 targeted questions *before* the report is final; non-answers are recorded and the affected priorities marked conditional. Same house pattern as [clarify-before-build](../clarify-before-build/).
+- **Assumption validation without deadlock.** Ranking-critical assumptions go to the user as 1–3 targeted questions when a user is available; headless PR gates record those assumptions as `unvalidated`, mark affected priorities conditional, and fail closed only when the unknown prevents a defensible risk decision. Same house pattern as [clarify-before-build](clarify-before-build.md).
 - **Few threats, fully traced.** The completion blockers kill checklist dumps: any threat that can't name its entrypoint, boundary, and asset doesn't ship.
 - **It's the library's security escalation point.** Seven other skills route to `$security-threat-model` when scope turns sensitive — see [docs/skill-graph.md](../../docs/skill-graph.md).
 
 ## Install
 
 ```bash
-cp -R skills/security-threat-model ~/.codex/skills/
+scripts/install-skill.sh security-threat-model
 ```
 
 Triggers on threat-modeling and attack-surface requests, and via escalation from the other gates.
