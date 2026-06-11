@@ -1,0 +1,4 @@
+interface:
+  display_name: "Error Logging Instrumentation"
+  short_description: "Audit and fix production error logging"
+  default_prompt: "Use $error-logging-instrumentation to review this app's error logging, patch gaps, and verify the instrumentation."

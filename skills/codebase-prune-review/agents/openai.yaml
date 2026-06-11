@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codebase Prune Review"
+  short_description: "Review and remove obsolete code paths safely"
+  default_prompt: "Use $codebase-prune-review to map live behavior, identify superseded code paths, and remove obsolete code in validated layers."

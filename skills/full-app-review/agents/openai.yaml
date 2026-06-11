@@ -1,0 +1,4 @@
+interface:
+  display_name: "Full App Review"
+  short_description: "Full repo review and fix plan"
+  default_prompt: "Use $full-app-review to fully review this app and produce an evidence-backed fix plan without mutating code."

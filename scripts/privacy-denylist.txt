@@ -1,0 +1,16 @@
+jameshinton
+(?-i)/Users/[A-Za-z]
+home-?stays-?sorted
+homestayssorted
+mentor-?2-?mentor
+catalystgroup
+catalyst-group-solutions
+cgs-uploaded
+cgs-ai
+CGS_SECRET
+tradeoxy
+zetherion
+the-expert-revolution
+airroi
+(?-i)\bHSS\b
+\b1[0-9]{17,19}\b

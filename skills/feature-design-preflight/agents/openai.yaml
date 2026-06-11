@@ -1,0 +1,4 @@
+interface:
+  display_name: "Feature Design Preflight"
+  short_description: "Trace requirements before implementation"
+  default_prompt: "Use $feature-design-preflight to trace this requirement through constraints, design, risks, and tests before implementation."

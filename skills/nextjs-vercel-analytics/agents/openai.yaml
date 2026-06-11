@@ -1,0 +1,4 @@
+interface:
+  display_name: "Next.js Vercel Analytics"
+  short_description: "Privacy-safe Vercel analytics for Next.js"
+  default_prompt: "Use $nextjs-vercel-analytics to add typed Vercel Web Analytics events to this Next.js app."

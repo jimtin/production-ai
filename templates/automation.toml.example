@@ -1,0 +1,31 @@
+# Example agent-harness automation definition (Codex CLI format).
+# A scheduled automation = a prompt + a schedule + a working directory.
+# Keep the prompt task-shaped and fail-closed: say exactly what to run,
+# what to report, and what to do on failure (stop and report — never
+# retry indefinitely, never bypass a failing gate).
+
+version = 1
+id = "nightly-guardrails-sync"
+kind = "cron"
+name = "Nightly Guardrails Sync"
+
+# The whole job in one prompt. Reference checked-in scripts by path rather
+# than inlining logic here — scripts are testable, prompts are not.
+prompt = """
+Run `scripts/sync-and-push.sh` from the guardrails repo working directory.
+Report: files changed, validation status, secret-scan status, push status,
+and the local report path. If validation, the secret scan, or the push
+fails, fail closed: do not retry indefinitely, do not bypass the gate,
+and include the failure plus the local report path in the report.
+"""
+
+status = "ACTIVE"            # or PAUSED
+rrule = "FREQ=DAILY;BYHOUR=23;BYMINUTE=30;BYSECOND=0"
+
+# Pin the model for deterministic-ish behavior; small models are fine for
+# script-runner automations. Match reasoning effort to the job.
+model = "<model-id>"
+reasoning_effort = "low"
+
+execution_environment = "local"
+cwds = ["~/workspace/<your-guardrails-repo>"]

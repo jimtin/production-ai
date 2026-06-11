@@ -1,0 +1,16 @@
+{
+  "name": "pr-production-gate",
+  "reportsDir": "~/.codex/automation-reports/pr-production-gate",
+  "stateDir": "~/.codex/automation-state/pr-production-gate",
+  "worktreeRoot": "~/.codex/automation-worktrees/pr-production-gate",
+  "deploymentPolicy": {
+    "maxDeploymentsPerRun": 1,
+    "abortOnPrHeadChange": true,
+    "leaseTtlMs": 14400000,
+    "freshnessPollMs": 30000
+  },
+  "poll": {
+    "limit": 10
+  },
+  "repositories": []
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "PR Production Gate"
+  short_description: "Auto-review PRs, reject unsafe changes, and deploy passing SHAs"
+  default_prompt: "Use $pr-production-gate to configure or operate the fully automatic containerized PR review and production deployment gate. For Vercel Git trains, preserve the promotion order: dev/* PRs promote to preview, preview deployment and smoke must pass, then the same candidate promotes to main."
