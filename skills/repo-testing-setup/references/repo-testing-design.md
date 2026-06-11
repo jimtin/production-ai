@@ -71,6 +71,11 @@ Include the hook install command and the verification command that proves hooks 
 - Hard timeout, stall detection, and heartbeat per long-running lane.
 - Artifact paths (reports, coverage, traces, screenshots, container logs); generated artifacts must not dirty tracked files.
 
-## 11. Exceptions and Deferred Items
+## 11. Agent Contract and Inventories
+
+- What the repo-local `AGENTS.md` (and `CLAUDE.md` where applicable) will record: canonical verify command, enforcement model, container-only rule, coverage thresholds, stub policy, secret-scan wrapper, deployment policy.
+- Where the critical-path and E2E workflow inventories will live as committed files (e.g. `docs/testing/`), so downstream skills read them as repo truth.
+
+## 12. Exceptions and Deferred Items
 
 Everything that makes the verdict `adopted-with-exceptions`: substitutions, deferred lanes, accepted risks — each with a reason and an owner decision.

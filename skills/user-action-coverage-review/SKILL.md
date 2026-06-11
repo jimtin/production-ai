@@ -25,7 +25,7 @@ Rerun before final validation if implementation scope changes, if a user action 
 
 1. Load repo truth.
    - Read applicable `AGENTS.md`, route/workflow manifests, critical-path inventories, Playwright specs, integration tests, unit tests, and relevant package scripts.
-   - Prefer existing repo inventory files over inventing a parallel source of truth.
+   - Prefer existing repo inventory files over inventing a parallel source of truth — `$repo-testing-setup` commits these at foundation time.
 
 2. Build the action matrix before implementation.
    - Include every affected click, form submit, save, autosave, upload/import/export, delete/archive, navigation, keyboard path, role-gated mutation, empty/error/retry state, and removed action.

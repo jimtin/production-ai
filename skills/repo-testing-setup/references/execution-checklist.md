@@ -44,15 +44,22 @@ Run only from a `CONFIRMED` design. Execute in order; verify each layer with its
 - Timeouts, stall detection, heartbeats on long lanes; stable artifact paths; generated output ignored by git.
 - Verify: a full run leaves the tree clean (`git status` empty apart from intended commits).
 
+## Layer 9 — Agent contract
+
+- Write or update the repo-local `AGENTS.md` (merge into `CLAUDE.md` where Claude Code operates in the repo) recording: the canonical verify command as the only acceptable full proof, the declared enforcement model (including "do not run the full verify before push" when gate-owned), container-only validation, coverage thresholds, stub/live-provider policy, the secret-scan wrapper, and the deployment policy.
+- Commit the critical-path and E2E workflow inventories from the design as repo-native files alongside the design document.
+- Verify: every command the contract names exists and runs; no aspirational rules — the same "delete every rule you won't enforce" principle as the workspace constitution.
+
 ## Final Proof
 
 1. Fast lane green.
 2. Full canonical gate green, in containers, end to end.
-3. Tooling matrix and design document committed to the repo.
-4. Verdict declared: `adopted` or `adopted-with-exceptions` (with section 11 of the design filled in).
+3. Tooling matrix, design document, workflow inventories, and the agent contract committed to the repo.
+4. Verdict declared: `adopted` or `adopted-with-exceptions` (with section 12 of the design filled in).
 
 ## Hand-offs
 
-- `$test-readiness-preflight` now preflights against the new canonical gate.
+- `$test-readiness-preflight` now preflights against the new canonical gate, and agents landing in the repo read the contract that explains it.
+- `$user-action-coverage-review` builds its matrix from the committed workflow inventories instead of re-deriving them.
 - `$pr-production-gate` may add the repo to its configuration.
-- Any deferred item from section 11 becomes scheduled work, not a silent gap.
+- Any deferred item from section 12 becomes scheduled work, not a silent gap.
