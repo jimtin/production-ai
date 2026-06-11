@@ -1,6 +1,6 @@
 # Coverage Failure Response
 
-Use this when a focused, full, host, or container coverage command fails.
+Use this when a focused, full, host, or container coverage command fails. This file is the single source for the coverage-failure classification — other documents point here rather than restating the classes.
 
 Do not stop at "coverage is blocking." Classify the failure and take the next implementation step.
 
