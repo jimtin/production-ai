@@ -7,7 +7,7 @@ Use this structure unless the user asks for a different output format. Keep it e
 - Repo:
 - Review date:
 - Review mode: read-only / commands run / validation run
-- Overall status: blocking issues found / high-risk gaps / ready for remediation planning / no material findings
+- Overall status: blocking issues found / high-risk gaps / ready for remediation planning / no material findings (derived per the SKILL.md rule — highest severity present, with any `blocked` dimension barring `no material findings`)
 - Highest-priority workstreams:
 
 ## Skill Coverage Matrix
@@ -17,6 +17,7 @@ Use this structure unless the user asks for a different output format. Keep it e
 | Frontend and visual quality | `$frontend-design-quality` |  |  |  |
 | Feature/workflow design | `$feature-design-preflight` |  |  |  |
 | Test readiness and coverage | `$test-readiness-preflight` |  |  |  |
+| User-action coverage | `$user-action-coverage-review` matrix |  |  |  |
 | Security | `$security-threat-model` |  |  |  |
 | Code pruning | `$codebase-prune-review` |  |  |  |
 | Analytics | `$nextjs-vercel-analytics` when applicable |  |  |  |
