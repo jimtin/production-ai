@@ -29,7 +29,7 @@ All code changes must meet these standards before being treated as complete:
 12. Requests to "fully review this app", "fully review this repo", run a full app review, perform a production readiness review, or perform a comprehensive app audit must use `$full-app-review` and produce an evidence-backed report plus prioritized remediation plan by default.
 13. Substantial user-facing feature, frontend, workflow, route, mutation, auth/role, upload, save/delete, navigation, admin/user portal, or release-readiness work must use `$user-action-coverage-review` after plan acceptance and before implementation. Rerun it before final validation if implementation scope changes.
 14. All validation lanes for code changes must run locally in containers. The host machine may orchestrate Docker, Docker Compose, package scripts, `make`, `just`, `uv`, or checked-in wrappers, but host-run lint/test/build commands are not canonical readiness evidence.
-15. Every adopted repo must block `git commit` with a fast local containerized pre-commit gate and block `git push` with the full local containerized pre-push gate. Hooks must be installed locally and verified active before work is reported push-ready.
+15. Every adopted repo must block `git commit` with a fast local containerized pre-commit gate, and must declare one of the two full-proof enforcement models (hook-owned or gate-owned — see Containerized Local Validation Default) in its tooling matrix. Hooks must be installed locally and verified active before work is reported push-ready.
 
 Do not lower coverage thresholds, remove gates, or bypass hooks to land a change.
 
@@ -103,7 +103,12 @@ Every adopted repo must expose repo-native equivalents for these three commands:
 
 Repo-native wrappers are preferred over forcing one hook framework. `.githooks`, `.git-hooks`, Husky, `pre-commit`, or another checked-in hook mechanism is acceptable only when it enforces the same behavior and has an install verification check that fails closed when hooks are absent or inactive.
 
-Pre-commit must run a fast containerized gate before every commit. It must include static checks, fast cybersecurity checks, and a fast unit smoke lane only when that lane stays quick and deterministic. Pre-push must run the full local containerized verification program before every push. It must include static validation, cybersecurity validation, unit coverage, critical-path integration coverage, and browser/E2E or equivalent service-journey coverage.
+Pre-commit must run a fast containerized gate before every commit. It must include static checks, fast cybersecurity checks, and a fast unit smoke lane only when that lane stays quick and deterministic.
+
+For full proof, every repo declares exactly one of two enforcement models in its tooling matrix:
+
+1. **Hook-owned proof** (no gate automation operates for the repo): pre-push runs the full local containerized verification program before every push — static validation, cybersecurity validation, unit coverage, critical-path integration coverage, and browser/E2E or equivalent service-journey coverage.
+2. **Gate-owned proof** (a PR production gate operates for the repo): the gate runs the full program on the exact candidate SHA before any merge or deploy, and owns that proof exclusively. Push hooks stay slim — static checks, security checks, and the critical lanes — and developers must not run the full verify before push; that duplicates the gate's proof. Never bypass a failing hook or the gate itself.
 
 The default toolset is required by validation layer unless a documented equivalent is already established or clearly better for the repo stack. Substitutions must be listed in the repo tooling matrix with the reason and equivalent coverage.
 

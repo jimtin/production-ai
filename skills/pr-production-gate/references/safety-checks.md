@@ -10,6 +10,19 @@
 - Required ready label is present when configured.
 - Previously processed passing/failing SHAs are skipped unless re-run is requested.
 
+## Run Economics
+
+- A no-work fast path runs before any expensive setup: lock check and eligibility query, exiting `no_eligible_prs`, `already_running`, or `waiting_on_author` in seconds.
+- Idle runs never build the full controller.
+- Every run ends in exactly one closed status: `deployed`, `rejected`, `no_eligible_prs`, `already_running`, `waiting_on_author`, or `blocked_infra`.
+
+## Infrastructure Health
+
+- A doctor preflight runs before review work and fails closed as `blocked_infra` when it cannot self-heal.
+- Locks carry pid and started-at metadata; dead-pid locks are recovered through the doctor path and the recovery is recorded.
+- Orphaned controller containers, worktrees, and processes from crashed runs are detected and cleaned.
+- Disk thresholds are enforced before runs; image/cache pruning is family-scoped with retention windows and cache caps, preserving stable base anchors. Indiscriminate prune-everything cleanup is forbidden.
+
 ## Local Isolation
 
 - Worktree path is inside the configured automation worktree root.
@@ -29,8 +42,10 @@
 
 ## External-Service Mocks
 
-- Clerk: seeded mock users, sessions, roles, organizations, auth states, and negative unauthorized states.
-- Stripe or payments: test double or local fake; no live charges.
+Substitute your stack's equivalents — these are examples:
+
+- Auth provider (e.g. Clerk): seeded mock users, sessions, roles, organizations, auth states, and negative unauthorized states.
+- Payments (e.g. Stripe): test double or local fake; no live charges.
 - Email: local capture service such as MailHog.
 - Storage: local fake such as MinIO or repo-native blob fake.
 - Analytics and telemetry: no live provider calls.
@@ -45,6 +60,18 @@
 - Integration tests cover API routes, persistence, auth/authz boundaries, provider adapters, jobs, queues, webhooks, uploads, and role transitions.
 - Browser/E2E tests cover changed user actions, role flows, navigation, forms, mutations, saves, deletes, uploads, toggles, error states, empty states, loading states, and responsive paths.
 - Tests use deterministic fixtures and local test data only.
+
+## Proof Cache Integrity
+
+- Lane proofs may be cached only when keyed by a content fingerprint of that lane's exact inputs.
+- Cached proofs are lane-scoped with a bounded TTL, and never substitute for the SHA lock.
+- Any doubt about cache validity invalidates the entry: fail closed and re-run the lane.
+
+## Flake Policy
+
+- A test that fails then passes without a code change is quarantined: entry with expiry date plus a tracking issue.
+- Quarantined tests cannot guard deploy lanes.
+- Silent retry-until-green is forbidden.
 
 ## Security
 
@@ -67,8 +94,8 @@
 
 - Deploy container receives production credentials only after all review gates pass.
 - Deploy command uses the exact reviewed SHA.
-- For Vercel Git, the reviewed candidate promotes to preview first, the matching preview deployment is observed, and preview smoke passes before production advances.
-- For Vercel Git, production receives the same reviewed candidate that passed preview; direct CLI production deploy commands are fallback-only.
+- For platform Git trains (e.g. Vercel Git), the reviewed candidate promotes to preview first, the matching preview deployment is observed, and preview smoke passes before production advances.
+- Production receives the same reviewed candidate that passed preview; direct CLI production deploy commands are fallback-only.
 - Production smoke verifies the deployed SHA, health route, critical public routes, and safe authenticated flows where available.
 - Runtime logs are checked when provider access exists.
 - Smoke failure marks the run failed and triggers the configured rollback/failure path.
@@ -76,5 +103,5 @@
 ## Learning
 
 - Record recurring failure signatures by hash.
-- Record missing mocks, env gaps, coverage gaps, migration issues, Playwright failures, and known setup fixes.
+- Record missing mocks, env gaps, coverage gaps, migration issues, Playwright failures, flake quarantine entries, and known setup fixes.
 - Use the repo learning profile before the next run to prepare mocks, seeds, browser states, and targeted checks.
