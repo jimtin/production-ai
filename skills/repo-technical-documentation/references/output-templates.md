@@ -115,7 +115,7 @@ Use these templates as the default shape. Remove sections that are not applicabl
 ```json
 {
   "schema_version": 1,
-  "inventory_command": "skills/repo-technical-documentation/scripts/repo_inventory.py <repo> --format json",
+  "inventory_command": "<skill-dir>/scripts/repo_inventory.py <repo> --format json",
   "repo_root": "<absolute path>",
   "tracked_file_count": 0,
   "files": [],

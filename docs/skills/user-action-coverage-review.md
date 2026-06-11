@@ -25,7 +25,7 @@ Gap rows are not observations — they become implementation tasks before the fu
 ## Install
 
 ```bash
-cp -R skills/user-action-coverage-review ~/.codex/skills/
+scripts/install-skill.sh user-action-coverage-review
 ```
 
 Triggers for substantial user-facing work: routes, forms, mutations, uploads, role-gated actions, portals, release readiness.

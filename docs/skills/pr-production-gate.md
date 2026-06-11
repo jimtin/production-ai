@@ -37,7 +37,7 @@ The fixes became contract requirements: the no-work fast path (idle runs in seco
 ## Install
 
 ```bash
-cp -R skills/pr-production-gate ~/.codex/skills/
+scripts/install-skill.sh pr-production-gate
 ```
 
 Start from [templates/pr-gate.config.example.json](../../templates/pr-gate.config.example.json) (intentionally inert) and schedule with [templates/automation.toml.example](../../templates/automation.toml.example).

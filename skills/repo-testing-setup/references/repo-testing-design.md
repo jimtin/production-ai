@@ -49,7 +49,7 @@ Per validation layer: tool, purpose, container, exact local command, pinned vers
 
 - Every external provider present, with its stub/fake decision (tool, location, determinism notes).
 - Live-provider lanes, if any: explicitly opt-in, non-canonical, documented.
-- Seed/reset strategy: deterministic rebuild from committed migrations alone; run-scoped data; cleanup hooks.
+- Seed/reset strategy: deterministic rebuild from checked-in migrations alone; run-scoped data; cleanup hooks.
 
 ## 7. Enforcement Model
 
@@ -81,7 +81,7 @@ If a parent or repo-local agent contract says a standalone PR/release gate owns 
 ## 11. Agent Contract and Inventories
 
 - What the repo-local `AGENTS.md` (and `CLAUDE.md` where applicable) will record: canonical verify command, enforcement model, container-only rule, coverage thresholds, stub policy, secret-scan wrapper, deployment policy.
-- Where the critical-path and E2E workflow inventories will live as committed files, so downstream skills read them as repo truth.
+- Where the critical-path and E2E workflow inventories will live as repo-tracked files, so downstream skills read them as repo truth.
 
 ## 12. Acceptance Ledger, Test Ledger, and Parallel Work
 

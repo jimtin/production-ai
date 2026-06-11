@@ -27,7 +27,7 @@ This is a documentation and inventory skill, not a remediation review. Use `$ful
    - Read parent and repo-local instructions.
    - Check `git status --short --untracked-files=all`.
    - Identify existing technical docs, source roots, test roots, package managers, deployment targets, and canonical validation commands.
-   - Run this skill's helper, `skills/repo-technical-documentation/scripts/repo_inventory.py <repo> --format json`, for a deterministic first-pass fact inventory when useful.
+   - Run this skill's helper, `scripts/repo_inventory.py <repo> --format json`, resolved relative to this skill directory, for a deterministic first-pass fact inventory when useful.
 
 2. **Build the evidence map.**
    - Use `references/discovery-checklist.md`.

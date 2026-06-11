@@ -1,11 +1,10 @@
 # Skill anatomy
 
-Every skill in this library follows the same structure. The consistency is the point: an agent (and a reader) always knows where the trigger lives, where the rules live, and where the depth is hiding.
+Every skill in this library follows the same structure. The consistency is the point: an agent always knows where the trigger lives, and a reader always knows where the explanation lives.
 
 ```
 skills/<skill-name>/
 ├── SKILL.md                  # the machine layer — what the agent loads
-├── README.md                 # the human layer — why it exists, how to adapt it
 ├── references/               # depth, loaded on demand
 │   ├── <checklist>.md
 │   └── <template>.md
@@ -15,7 +14,13 @@ skills/<skill-name>/
 ├── agents/
 │   └── openai.yaml           # interface metadata (display name, default prompt)
 └── <skill-name>-threat-model.md   # for skills that touch risky surfaces
+
+docs/skills/
+├── README.md                 # public skill catalog
+└── <skill-name>.md           # the human layer — why it exists, how to adapt it
 ```
+
+The `skills/<skill-name>/` directory is the installable payload. It deliberately does not contain `README.md`; use `scripts/install-skill.sh <skill-name>` so only runtime files are copied into the agent's skills directory.
 
 ## The frontmatter is a router, not a summary
 
@@ -72,7 +77,7 @@ Skills that operate on risky surfaces (deployment, log redaction, automation tha
 In this repo every skill carries both layers deliberately:
 
 - `SKILL.md` is written **to the agent**: imperative, dense, no motivation, no audience-pleasing.
-- `README.md` is written **to a person**: the failure story, the design choices worth stealing, what to customize.
+- `docs/skills/<skill-name>.md` is written **to a person**: the failure story, the design choices worth stealing, what to customize.
 
 Keeping them separate keeps both honest. Motivational prose in the machine layer wastes tokens; terse imperatives in the human layer hide the insight.
 
@@ -81,6 +86,8 @@ Keeping them separate keeps both honest. Motivational prose in the machine layer
 When writing a new skill (start from [templates/SKILL-template.md](../templates/SKILL-template.md)):
 
 - [ ] Description names concrete trigger situations and symptoms, under 1024 chars
+- [ ] Installable payload under `skills/<skill-name>/` contains no `README.md`
+- [ ] Public guide exists at `docs/skills/<skill-name>.md`
 - [ ] Default outcome stated (report vs. mutate)
 - [ ] Operating rules include the failure mode you are most afraid of
 - [ ] Workflow steps reference depth files instead of inlining them
