@@ -27,6 +27,21 @@ Produces an **implementation readiness note** with an explicit status — `READY
 - **Clarify-triggers are enumerated — and they learn.** The trigger list includes recurrence evidence: if the same feature class failed before, or production runtime reports show quota/transient failures in the area, resilience becomes part of the requirement. (Those triggers were added by the nightly [learning loop](../../docs/patterns/learning-loop.md) — this skill's reference files are where its lessons land.)
 - **The note survives the session.** Substantial features write the readiness note to a file — reviewable in git, immune to context compaction, and appended to the plan when invoked from `$clarify-before-build`.
 
+## The domain checklists
+
+The skill's deep-knowledge layer ([references/domain-checklists.md](references/domain-checklists.md)) holds eight sections of distilled "what goes wrong in this kind of feature" — loaded only when the feature being designed actually touches that domain. Every line is a production incident written down, and every section ends in tests with hostile fixtures.
+
+| Domain | The questions it forces |
+|---|---|
+| **Uploads, media, video** | Real file sizes and formats; direct-to-storage vs. proxied vs. resumable upload; progress/pause/retry/cancel UX; malware scanning and MIME-sniffing; ownership, signed URLs, expiring playback; transcode pipelines and processing states; orphan cleanup, quotas, retention |
+| **PDFs, documents, parsing** | Which operations are actually needed (parse, merge, OCR, redact…); hostile files — password-protected, corrupt, scanned, oversized; whether the library survives the target runtime (native binaries, WASM, memory); parser security: decompression bombs, path traversal, malicious embedded content |
+| **External APIs / providers** | Auth scopes, rate limits, pagination, idempotency, webhook behavior; sandbox availability and deterministic local test doubles; outage, partial success, duplicate webhooks, shape changes; whether the implementation can accidentally create an expensive loop |
+| **Long-running / background jobs** | The sync-vs-async decision itself; queue/worker/cron/durable-workflow choice; idempotency keys, retry policy, backoff, dead-letter, cancellation; the user-visible state machine (queued → processing → retrying → failed → complete); admin retry and audit controls |
+| **Migrations / model changes** | Expand → deploy → contract classification; compatibility with the *currently deployed* schema; proof the migration applied before dependent code ships; rollback that works in both schema states; the banned list — same-release drops, renames, non-null without backfill, enum narrowing |
+| **Auth, permissions, portals** | Roles, tenancy boundaries, impersonation, audit; all the *denial* paths — unauthorized, expired session, revoked access, cross-tenant attempts; browser tests per role including denied actions |
+| **Payments, billing, webhooks** | Source of truth and idempotency keys; duplicate, delayed, and out-of-order webhooks; refunds, disputes, trials, plan changes; test/live isolation; ledger and reconciliation records |
+| **AI, LLM, generated content** | Structured-output guarantees, token limits, latency, cost caps and fallbacks; prompt injection, tool permissions, retention, moderation; streaming/partial/regeneration states; tests for schema violations, timeouts, refusals, and cost guardrails |
+
 ## Install
 
 ```bash
@@ -37,6 +52,6 @@ Triggers before nontrivial features — uploads, media, documents, third-party A
 
 ## Adapt it
 
-- `references/domain-checklists.md` carries per-domain gotchas (uploads, parsing, providers, jobs, migrations, auth, payments, AI) — extend it with your scars.
+- The domain checklists are the designated extension point — when something burns you that a section didn't catch, the fix is a new line. Extend them with your scars.
 - Wire its output into your planning gate: in this library, `$clarify-before-build` won't close a contract until this skill's findings are represented.
 - If you have an ADR habit, emit the readiness note as a lightweight ADR — the status line and verified-limits receipts port directly.
