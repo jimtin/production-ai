@@ -1,0 +1,4 @@
+interface:
+  display_name: "Laptop Currency Maintenance"
+  short_description: "Safely keep developer tooling current"
+  default_prompt: "Use $laptop-currency-maintenance to audit and safely update host developer tooling while keeping repo dependencies report-only."

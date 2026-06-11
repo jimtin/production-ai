@@ -1,0 +1,4 @@
+interface:
+  display_name: "Security Threat Model"
+  short_description: "Evidence-grounded threat model with prioritized abuse paths"
+  default_prompt: "Use $security-threat-model to build an evidence-grounded threat model for the target repo or path: system model, trust boundaries, assets, realistic abuse paths with likelihood/impact priorities, and mitigations. Validate ranking-critical assumptions with me before finalizing, and write the <target>-threat-model.md report."

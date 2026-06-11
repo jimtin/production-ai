@@ -22,5 +22,11 @@ jobs:
       - name: Validate skill structure
         run: ./scripts/validate.sh
 
+      - name: Run skill script tests
+        run: |
+          shopt -s nullglob globstar
+          files=(skills/**/scripts/*.test.mjs)
+          if [ ${#files[@]} -gt 0 ]; then node --test "${files[@]}"; else echo "no script tests"; fi
+
       - name: Privacy scan (fail closed)
         run: REQUIRE_GITLEAKS=1 ./scripts/privacy-scan.sh

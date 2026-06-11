@@ -1,0 +1,38 @@
+{
+  "name": "laptop-currency-maintenance",
+  "workspace": "/ABSOLUTE/PATH/TO/your-workspace",
+  "reportsDir": "/ABSOLUTE/PATH/TO/.codex/automation-reports/laptop-currency-maintenance",
+  "stateDir": "/ABSOLUTE/PATH/TO/.codex/automation-state/laptop-currency-maintenance",
+  "logDir": "/ABSOLUTE/PATH/TO/.codex/automation-logs/laptop-currency-maintenance",
+  "discord": {
+    "enabled": false,
+    "channelId": "<DISCORD_CHANNEL_ID>",
+    "botTokenPath": "/ABSOLUTE/PATH/TO/.codex/secrets/discord-bot-token"
+  },
+  "homebrew": {
+    "enabled": true,
+    "autoUpgradeFormulae": true,
+    "skipCasks": true,
+    "skipPinned": true,
+    "cleanupAfterUpgrade": true,
+    "highImpactFormulae": ["node", "gh", "gitleaks"]
+  },
+  "repoDependencies": {
+    "enabled": true,
+    "maxRepos": 50,
+    "maxPackagesPerRepo": 20,
+    "audit": true
+  },
+  "globalNpm": {
+    "enabled": true,
+    "reportOnly": true
+  },
+  "cliVersionCommands": [
+    { "name": "brew", "command": "brew", "args": ["--version"] },
+    { "name": "node", "command": "node", "args": ["--version"] },
+    { "name": "npm", "command": "npm", "args": ["--version"] },
+    { "name": "gh", "command": "gh", "args": ["--version"] },
+    { "name": "docker", "command": "docker", "args": ["--version"] },
+    { "name": "gitleaks", "command": "gitleaks", "args": ["version"] }
+  ]
+}
