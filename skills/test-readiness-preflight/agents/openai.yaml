@@ -1,0 +1,4 @@
+interface:
+  display_name: "Test Readiness Preflight"
+  short_description: "Fix obvious blockers before validation"
+  default_prompt: "Use $test-readiness-preflight to clear predictable blockers before running the full test gate."

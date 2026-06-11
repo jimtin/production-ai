@@ -1,0 +1,4 @@
+interface:
+  display_name: "Repo Technical Documentation"
+  short_description: "Document repo architecture and technical details"
+  default_prompt: "Use $repo-technical-documentation to document this repo's architecture, APIs, UI, dependencies, and technical rationale."

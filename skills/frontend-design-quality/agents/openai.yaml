@@ -1,0 +1,4 @@
+interface:
+  display_name: "Frontend Design Quality"
+  short_description: "Responsive UI design and verification guardrails"
+  default_prompt: "Use $frontend-design-quality to build or review a responsive frontend flow and verify it visually across viewports."

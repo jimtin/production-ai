@@ -1,0 +1,4 @@
+interface:
+  display_name: "Clarify Before Build"
+  short_description: "Question-led planning before implementation"
+  default_prompt: "Use $clarify-before-build to question and complete the plan before implementation starts."
