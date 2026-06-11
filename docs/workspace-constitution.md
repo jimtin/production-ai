@@ -11,7 +11,7 @@ Fifteen numbered rules that define "complete" for any code change. The load-bear
 - **≥90% unit coverage** (statements, branches, functions, lines), **critical paths under integration tests**, **every user action under browser/E2E tests**. Three layers, none optional.
 - **Secret scan + threat-model review before any push.** Not "when security seems relevant" — the agent does not get to decide relevance unilaterally.
 - **Container-only validation.** Host-run lint/test/build is never canonical proof. The host orchestrates Docker; containers produce evidence. This kills "works on my machine" *and* "works in the agent's environment."
-- **Hooks enforce the same gates.** Pre-commit runs a fast containerized lane, pre-push runs the full one. Rules without hooks are requests, not gates.
+- **Hooks enforce the gates — under one of two declared models.** Pre-commit always runs a fast containerized lane. Full proof is owned either by the pre-push hook (no gate automation) or by a PR production gate that re-proves the exact candidate SHA — in which case push hooks stay slim and running the full verify before push is explicitly *not allowed*, because it duplicates the gate's proof. Rules without hooks are requests, not gates.
 
 ## Ledgers: the anti-drift mechanism
 
