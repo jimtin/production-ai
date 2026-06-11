@@ -1,6 +1,6 @@
 # Repo Quality Gate Adoption Template
 
-Use this template when adopting or hardening the workspace default that all validation runs locally in containers and git hooks enforce the same gates. The host may orchestrate Docker, Docker Compose, package scripts, `make`, `just`, `uv`, or checked-in wrappers, but host-run lint/test/build commands are not canonical readiness evidence.
+Use this template when adopting or hardening the workspace default that all validation runs locally in containers and a declared local enforcement model controls when those gates run. The host may orchestrate Docker, Docker Compose, package scripts, `make`, `just`, `uv`, or checked-in wrappers, but host-run lint/test/build commands are not canonical readiness evidence.
 
 ## Adoption Scope
 
@@ -18,7 +18,7 @@ Use this template when adopting or hardening the workspace default that all vali
 
 Create or update a checked-in matrix with these columns:
 
-| Tool name | Purpose | Validation layer | Container or service used | Exact local command | Equivalent or exception reason |
+| Tool name | Purpose | Validation layer | Container or service used | Exact local command | Version/digest and equivalent/exception reason |
 | --- | --- | --- | --- | --- | --- |
 | `editorconfig-checker` | EditorConfig conformance | Static | `<tool container>` | `<command>` | Required unless not applicable |
 | `shellcheck` | Shell linting | Static | `<tool container>` | `<command>` | Required when shell scripts exist |
@@ -65,11 +65,21 @@ Create or update a checked-in matrix with these columns:
 - Required lanes: static checks, fast cybersecurity checks, and a fast unit smoke lane only if it remains quick.
 - The hook must fail closed when Docker, Docker Compose, required tool containers, or required local env/test-double config are unavailable.
 
+## Enforcement Model
+
+Declare exactly one enforcement model and record it in the tooling matrix and repo agent contract:
+
+- **Hook-owned proof**: pre-push runs the full canonical gate.
+- **Gate-owned proof**: a standalone PR/release gate re-proves the exact candidate SHA. Developer hooks stay slim and deterministic: secret scan, dependency audit, static/governance checks, typecheck, critical integration, and critical browser lanes. Do not run the full verify suite before developer pushes when the repo contract assigns full proof to the standalone gate.
+
+When parent or repo-local instructions define the model, follow those instructions instead of picking a default.
+
 ## Pre-Push Enforcement
 
 - Install a checked-in `pre-push` hook through the repo-native hook manager.
-- The hook must invoke the full local containerized verification command before every push.
-- Required lanes: static, cybersecurity, unit coverage, critical integration coverage, and E2E coverage.
+- Under hook-owned proof, the hook must invoke the full local containerized verification command before every push.
+- Under gate-owned proof, the hook must invoke the repo's slim push lanes and must not duplicate the standalone exact-SHA full gate unless the repo contract explicitly requires it.
+- Required lanes are determined by the enforcement model and must be named exactly.
 - Do not recommend bypassing hooks. Do not use `git push --no-verify` as a normal workflow.
 
 ## Stubs, Fakes, and Test Isolation
@@ -83,6 +93,7 @@ Create or update a checked-in matrix with these columns:
 - Every long-running lane must have a hard timeout, stall detection, heartbeat output, and readable logs.
 - Record the timeout value, stall threshold, heartbeat interval, and cleanup policy for each major lane.
 - Fail fast on missing prerequisites before starting expensive suites.
+- Retry-until-green is not proof. Any known flake needs quarantine with expiry, owner, tracking reference, and exclusion from deploy-guarding lanes.
 
 ## Artifacts and Reports
 
@@ -101,6 +112,7 @@ Create or update a checked-in matrix with these columns:
 - Prefer the repo's wrapper when it already scopes scans correctly and redacts findings.
 - Otherwise run gitleaks in a container with only the exact git repo root mounted read-only, never a workspace parent.
 - Add `osv-scanner`, `trivy fs`, stack-native dependency audit, and `trivy image` where applicable.
+- Pin scanner/container versions or record the update policy and reproducibility exception.
 - Treat findings as blocking until fixed, narrowly allowlisted as non-secret fixtures, or explicitly accepted.
 
 ## Coverage and Test Layer Proof
@@ -124,6 +136,8 @@ Every repo adoption completion report must include:
 3. Container topology.
 4. Tool matrix by validation layer.
 5. Hook enforcement design.
-6. Commands implemented.
-7. Validation results.
-8. Remaining intentionally unimplemented items.
+6. Tool and runner version/pinning policy.
+7. Flake/quarantine policy.
+8. Commands implemented.
+9. Validation results.
+10. Remaining intentionally unimplemented items.

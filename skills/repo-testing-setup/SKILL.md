@@ -1,6 +1,6 @@
 ---
 name: repo-testing-setup
-description: Design-then-execute setup of a repository's complete testing and security validation foundation. Containerized lanes for every test layer, a canonical verify command, hook enforcement under a declared model, repo-scoped secret scanning, dependency and image audits, deterministic stubs for external providers, and deployment branch policy. Use after $clarify-before-build and $feature-design-preflight when a new project needs its testing approach designed, when a repo has no canonical containerized gate, when tests run on the host, or when security scanning is missing or mis-scoped. Produces a Repo Testing Design for explicit confirmation, then executes it, records the rules in the repo's agent contract (AGENTS.md/CLAUDE.md), and proves it with a green canonical gate run. Not for writing feature tests or fixing individual test failures — that is implementation work behind $test-readiness-preflight.
+description: Design-then-execute setup of a repository's complete testing and security validation foundation. Containerized lanes for every test layer, canonical verify command, declared hook/gate enforcement model, repo-scoped secret scanning, dependency and image audits, deterministic provider stubs, deployment branch policy, committed testing inventories, pinned tool policy, and flake handling. Use after $clarify-before-build and $feature-design-preflight when a new project needs its testing approach designed, when a repo has no canonical containerized gate, when tests run on the host, or when security scanning is missing or mis-scoped. Use the short path to audit an adopted repo without mutation. Produces a confirmed Repo Testing Design, executes it, records rules in AGENTS.md/CLAUDE.md, and proves it with a green canonical gate. Not for writing feature tests or fixing individual failures; use $test-readiness-preflight.
 ---
 
 # Repo Testing Setup
@@ -18,6 +18,7 @@ This is the third stage of the build pipeline: `$clarify-before-build` agrees wh
 - Consume the upstream artifacts when they exist: the Shared Understanding Contract supplies critical paths, roles, and acceptance criteria; feature readiness notes supply the providers to stub, the failure modes to test, and the E2E workflows to inventory.
 - This skill covers testing, validation, and security setup only. Folder layout, package structure, and application scaffolding are not its business — how the repo is organized belongs to the repo; how it proves itself belongs here.
 - It runs roughly once per repo. When a repo is already adopted, run the short path: re-audit against the standard and report deltas (`present / partial / missing / substituted / not-applicable` per area) instead of redoing setup.
+- When a repo has a parent or repo-local agent contract that says a standalone PR/release gate owns full proof, choose the gate-owned enforcement model by default: developer hooks stay slim and deterministic, and the standalone gate re-proves the exact candidate SHA. Use hook-owned full pre-push only when the repo contract or user explicitly chooses it.
 
 ## Operating Rules
 
@@ -29,6 +30,8 @@ This is the third stage of the build pipeline: `$clarify-before-build` agrees wh
 - The enforcement model is declared, not implied: hook-owned proof (full pre-push) or gate-owned proof (slim hooks, the PR gate re-proves the exact candidate SHA). Exactly one, recorded in the tooling matrix.
 - Secret scanning is repo-scoped and containerized from day one: resolve the git repo root, mount it read-only, never scan a workspace parent.
 - Coverage thresholds meet or exceed the workspace constitution (`>=90%` unit; critical paths under integration; user actions under browser/E2E). Setup never lowers a standard to make adoption easier — substitutions are documented, not silent.
+- Tool versions and runner images are proof inputs. Prefer pinned versions or digests for scanners, runners, base images, and package-manager tools. If a repo deliberately uses floating tags, record the update policy and the reason in the design.
+- Flakes are testing-foundation defects. Do not encode retry-until-green as proof; define quarantine with expiry, owner, and tracking for any known unstable test before the gate depends on it.
 - Design before mutation. Nothing is installed, rewritten, or committed until the Repo Testing Design is explicitly confirmed.
 - The setup is not done until agents are told about it. The repo-local agent contract (`AGENTS.md`, merged into `CLAUDE.md` where Claude Code is in use) must record what the foundation established — the canonical verify command as the only acceptable full proof, the declared enforcement model, container-only validation, coverage thresholds, stub policy, the secret-scan wrapper, and the deployment policy. It states only commands and rules that actually exist: no aspirational lines.
 
@@ -36,9 +39,9 @@ This is the third stage of the build pipeline: `$clarify-before-build` agrees wh
 
 1. **Gather inputs.** Read the Shared Understanding Contract and feature readiness notes when they exist. Discover repo truth — package scripts, lockfiles, test configs, compose files, hook configs, CI workflows, platform config — using the repo-discovery reference shipped with `$test-readiness-preflight`.
 2. **Build the gap map.** For each area of the standard (test layers, containerization, canonical command, hooks, secret scanning, audits, stubs, seeds, deployment policy, runners/artifacts), classify the repo's current state: `present`, `partial`, `missing`, `substituted`, or `not-applicable` with a reason. Greenfield repos are a gap map where everything is `missing` — same workflow, shorter discovery.
-3. **Draft the Repo Testing Design.** Use `references/repo-testing-design.md` as the contract. Derive the critical-path integration inventory and E2E workflow inventory from the upstream artifacts; the tool matrix starts from the workspace defaults (the adoption template shipped with `$test-readiness-preflight` carries the full table) with substitutions justified per row.
+3. **Draft the Repo Testing Design.** Use `references/repo-testing-design.md` as the contract and `references/repo-artifact-templates.md` for the committed file names and table shapes. Derive the critical-path integration inventory and E2E workflow inventory from the upstream artifacts; the tool matrix starts from the workspace defaults (the adoption template shipped with `$test-readiness-preflight` carries the full table) with substitutions justified per row.
 4. **Confirm.** Present the design and wait for explicit confirmation. Material changes during execution reopen the design.
-5. **Execute in layers.** Follow `references/execution-checklist.md`: container lanes and inner commands → canonical verify command → fast pre-commit lane → hook installation with active verification → security tooling → stubs, fakes, and seeds → deployment branch policy → bounded runners and artifact paths → the repo agent contract. Verify each layer with its cheap check before the next.
+5. **Execute in layers.** Follow `references/execution-checklist.md`: acceptance/test ledgers and parallel-work decision → container lanes and inner commands → canonical verify command → fast pre-commit lane → hook installation with active verification → security tooling → stubs, fakes, and seeds → deployment branch policy → bounded runners and artifact paths → the repo agent contract. Verify each layer with its cheap check before the next.
 6. **Prove it.** Run the fast lane, then the full canonical gate, in containers, to green. A setup whose own gate has never passed is not a setup.
 7. **Record and hand off.** Commit the tooling matrix, the design document, and the critical-path and E2E workflow inventories into the repo (e.g. `docs/testing/`) — they become the repo-native truth that `$user-action-coverage-review` and the gate read instead of re-deriving. Declare the verdict. From here, `$test-readiness-preflight` has a canonical gate to preflight, and the repo is eligible for `$pr-production-gate` configuration.
 
@@ -55,6 +58,7 @@ The security layer is part of testing setup, not an optional extra:
 Invoked headless, this skill stops at the design:
 
 - Produce the gap map and the Repo Testing Design labeled `DRAFT - not confirmed`.
+- For already-adopted repos, produce the audit-only report from `references/gap-audit-report.md` and do not mutate anything.
 - Never install hooks, rewrite scripts, or change platform config without confirmation.
 - In a gate or automation context, a repo without an adopted testing foundation is reported `blocked` — not silently set up.
 
@@ -71,6 +75,9 @@ Do not declare `adopted` while any of these are true:
 - The enforcement model is undeclared, or a production-bound repo has no deployment branch policy.
 - The canonical gate has not run green since setup completed.
 - Execution started without a confirmed design (interactive), or a headless run mutated anything at all.
+- The acceptance ledger, test ledger, or parallel-work decision was omitted during execution.
+- Tool/scanner/runner versions are floating without a documented update policy or exception.
+- Flaky tests can guard the canonical gate without quarantine, expiry, and owner.
 - The design document and tooling matrix are not committed to the repo.
 - The repo-local agent contract does not record the canonical gate, the enforcement model, and the container-only rule — or records commands that do not exist.
 - The critical-path and E2E workflow inventories are not committed as repo-native files.
@@ -86,7 +93,9 @@ Do not declare `adopted` while any of these are true:
 ## References
 
 - `references/repo-testing-design.md`: the design document contract — every section the design must contain.
+- `references/repo-artifact-templates.md`: committed file names and table shapes for the design, tooling matrix, inventories, and adoption report.
 - `references/execution-checklist.md`: the ordered execution layers, per-layer verification, and final proof requirements.
+- `references/gap-audit-report.md`: the short-path audit report contract for already-adopted repos or headless reviews.
 - The full default tool matrix and adoption worksheet ship with `$test-readiness-preflight` (repo-quality-gate-adoption template); this skill consumes them rather than duplicating the table.
 
 ## Used By

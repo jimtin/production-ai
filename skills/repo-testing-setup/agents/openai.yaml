@@ -1,4 +1,4 @@
 interface:
   display_name: "Repo Testing Setup"
   short_description: "Design and stand up containerized testing + security"
-  default_prompt: "Use $repo-testing-setup to design this repo's complete testing and security validation foundation — containerized lanes, canonical verify command, hooks, secret scanning, provider stubs, deployment branch policy — then, after I confirm the design, execute it and prove it with a green canonical gate run."
+  default_prompt: "Use $repo-testing-setup to audit or design this repo's complete testing and security validation foundation — containerized lanes, canonical verify command, declared hook/gate enforcement model, secret scanning, provider stubs, pinned tool policy, workflow inventories, and deployment branch policy — then, after I confirm the design, execute it and prove it with a green canonical gate run."

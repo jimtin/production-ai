@@ -27,6 +27,7 @@ Use these skills as sub-workflows when their dimensions are in scope:
 - `$frontend-design-quality`: UI patterns, responsiveness, viewport fill, visual states, portals/admin flows, screenshots, and overflow checks.
 - `$feature-design-preflight`: nontrivial workflows, provider limits, data/control flow, failure modes, UX states, and operational constraints.
 - `$test-readiness-preflight`: coverage obligations, integration/E2E gaps, local/container gates, migrations, seeds, test doubles, and validation blockers.
+- `$repo-testing-setup`: missing or incomplete testing foundation, host-only lanes, absent canonical containerized gate, undeclared hook/gate enforcement model, missing tooling matrix, missing committed workflow inventories, mis-scoped secret scanning, or missing provider stubs. In a review, report this as remediation; do not mutate.
 - `$user-action-coverage-review`: the matrix format for user-action browser/E2E evidence. Express the testing dimension's user-action findings as its action matrix (action, surface, role, data state, evidence, status) so gaps convert directly into implementation tasks.
 - `$security-threat-model`: trust boundaries, auth/authz, secrets, uploads, parsers, webhooks, admin paths, deployment surfaces, and abuse cases.
 - `$codebase-prune-review`: redundant, superseded, legacy, dead, compatibility, or attack-surface-increasing paths.
@@ -46,7 +47,7 @@ When a dimension is not applicable, record it as `not applicable` with a short r
    - Record evidence for each row: files, scripts, configs, commands inspected, and observed gaps.
 3. Evaluate each dimension.
    - Frontend: existing UI patterns, responsive behavior, viewport use, clutter, role portals, visual states, overflow risks, and screenshot coverage.
-   - Testing: unit coverage targets, integration coverage, browser/E2E user actions expressed in the `$user-action-coverage-review` matrix format, test isolation, seeds, migrations, container/local gates, and predictable validation blockers.
+   - Testing: unit coverage targets, integration coverage, browser/E2E user actions expressed in the `$user-action-coverage-review` matrix format, test isolation, seeds, migrations, container/local gates, testing-foundation adoption status per `$repo-testing-setup`, and predictable validation blockers.
    - Security: trust boundaries, auth/authz, secrets, uploads, file parsing, webhooks, admin surfaces, data exposure, CI/CD, and deployment risks.
    - Observability: client/server/runtime error capture, log hygiene, privacy/redaction, alerting/monitoring evidence, and runbook gaps. Use `$error-logging-instrumentation` for detailed logging coverage analysis or remediation.
    - Analytics: only when applicable, verify typed event taxonomy, no-PII payload rules, frontend/backend event connection, and platform plan limitations.
