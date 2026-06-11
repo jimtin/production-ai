@@ -20,6 +20,7 @@ The pipeline from repo artifacts to published content. Each row is one piece; th
 | 10 | **Docs that admit what they don't know** — confidence-tagged documentation | [repo-technical-documentation](../../skills/repo-technical-documentation/) | post | ready |
 | 11 | **Analytics without the PII liability** — typed events, intent vs. outcome | [nextjs-vercel-analytics](../../skills/nextjs-vercel-analytics/) | post + code walkthrough | ready |
 | 19 | **Threat models that aren't checklist dumps** — evidence tags, non-capabilities, traced abuse paths | [security-threat-model](../../skills/security-threat-model/) | post | ready |
+| 22 | **Make every repo prove itself in containers** — the testing foundation, designed then stood up | [repo-testing-setup](../../skills/repo-testing-setup/) | post + live setup demo | ready |
 
 ## Series 2 — The system (the patterns)
 

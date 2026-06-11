@@ -51,5 +51,5 @@ Every substantial task ends with a report: what changed, what was verified with 
 
 1. Copy the template to your workspace root as `AGENTS.md` (Claude Code: merge into `CLAUDE.md`).
 2. **Delete every rule you will not enforce.** An aspirational constitution trains the agent that rules are decorative. It is better to enforce 90% coverage on two repos than to claim it on ten.
-3. Stand up the enforcement the rules assume, repo by repo: a containerized verify command, pre-commit/pre-push hooks, a secret-scan wrapper. The [test-readiness-preflight](../skills/test-readiness-preflight/) skill includes a repo adoption template for exactly this.
+3. Stand up the enforcement the rules assume, repo by repo: the [repo-testing-setup](../skills/repo-testing-setup/) skill designs and executes exactly this — containerized lanes, canonical verify command, hooks, secret scanning, deployment policy — and proves it with a green gate run. (The underlying adoption worksheet ships with [test-readiness-preflight](../skills/test-readiness-preflight/).)
 4. Keep skills and constitution in sync: the constitution names the skills (`$clarify-before-build`, `$test-readiness-preflight`, …) at the moments they become mandatory. If you rename or remove a skill, update the constitution in the same change.

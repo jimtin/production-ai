@@ -17,6 +17,7 @@ graph TD
         TRP[test-readiness-preflight]
         UAC[user-action-coverage-review]
         CPR[codebase-prune-review]
+        RTS[repo-testing-setup]
         ELI[error-logging-instrumentation]
         STM[security-threat-model]
     end
@@ -32,6 +33,7 @@ graph TD
     CBB --> STM
     CBB --> FDP
     CBB --> UAC
+    CBB --> RTS
     FAR --> FDQ
     FAR --> FDP
     FAR --> TRP
@@ -45,6 +47,9 @@ graph TD
     PRG --> UAC
     PRG --> CPR
     PRG --> STM
+    PRG --> RTS
+    TRP --> RTS
+    RTS --> STM
     CPR --> STM
     CPR --> TRP
     CPR --> FDP

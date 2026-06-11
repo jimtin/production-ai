@@ -54,6 +54,7 @@ The gate runs unattended on a real machine; the machine is part of the system. B
 - For private repos, the controller must require an authenticated GitHub token before cloning, fetching PR refs, promoting branches, or posting reviews. Runtime state, reports, cloned repos, Buildx state, and real env files stay local-only and must be ignored.
 - For platform Git deployment trains, manual CLI deploy commands are fallback-only and must not be part of the automatic path. The automatic path is preview promotion, preview deployment observation, preview smoke, main promotion, production deployment observation, and production smoke for the same reviewed candidate.
 - Fork PRs and untrusted authors are review-only unless a repo config explicitly accepts that risk.
+- A repo joins the gate's configuration only after `$repo-testing-setup` (or an equivalent adoption) has produced a green canonical containerized gate — the gate runs proof, it does not invent the proof infrastructure.
 
 ## Core Workflow
 
