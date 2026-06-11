@@ -19,6 +19,7 @@ The design document this skill produces and the user confirms before anything is
 | Unit lane (containerized) | `present / partial / missing / substituted / not-applicable` | |
 | Integration lane (containerized, local services) | | |
 | Browser/E2E lane (containerized) | | |
+| Production build / build smoke (containerized) | | |
 | Static checks lane | | |
 | Canonical verify command | | |
 | Fast pre-commit lane | | |
@@ -42,6 +43,7 @@ Per validation layer: tool, purpose, container, exact local command, pinned vers
 - Unit: coverage thresholds (constitution floor `>=90%`; changed-scope target `>=95%`), margin policy for container/host variance.
 - Integration: the critical-path inventory — derived from the Shared Understanding Contract's acceptance criteria and flows. Each path named and persisted as `docs/testing/critical-path-inventory.md`.
 - Browser/E2E: the workflow inventory — every user-facing workflow, role, and mutation class the repo must prove, in `$user-action-coverage-review` matrix terms where user-facing. Persist as `docs/testing/e2e-workflow-inventory.md`.
+- Build: production build or build-smoke lane for every buildable/runtime repo, containerized and included in the canonical gate. If not applicable, record why the repo has no build artifact or runtime surface.
 
 ## 6. Stubs, Fakes, and Test Data
 

@@ -12,6 +12,7 @@ Run only from a `CONFIRMED` design. Execute in order; verify each layer with its
 ## Layer 1 — Container lanes
 
 - Stand up the test/tool containers: compose services or runner images for unit, integration, browser/E2E, static checks, and audits.
+- Add a production build or build-smoke container lane for every buildable/runtime repo.
 - Inner-container commands documented separately and marked not-for-host use.
 - Pin runner and scanner images or record the exception and update policy in the tooling matrix.
 - Verify: each lane runs standalone in its container against the current repo state.
@@ -64,10 +65,11 @@ Run only from a `CONFIRMED` design. Execute in order; verify each layer with its
 ## Final Proof
 
 1. Fast lane green.
-2. Full canonical gate green, in containers, end to end.
-3. Acceptance ledger and test ledger reconciled: every row is `verified`, `blocked`, or explicitly deferred in the design exceptions.
-4. Tooling matrix, design document, workflow inventories, adoption report, and the agent contract committed to the repo.
-5. Verdict declared: `adopted` or `adopted-with-exceptions` (with the exceptions/deferred-items section of the design filled in).
+2. Production build/build-smoke lane green in containers, or explicitly `not-applicable` with the design reason.
+3. Full canonical gate green, in containers, end to end.
+4. Acceptance ledger and test ledger reconciled: every row is `verified`, `blocked`, or explicitly deferred in the design exceptions.
+5. Tooling matrix, design document, workflow inventories, adoption report, and the agent contract committed to the repo.
+6. Verdict declared: `adopted` or `adopted-with-exceptions` (with the exceptions/deferred-items section of the design filled in).
 
 ## Hand-offs
 

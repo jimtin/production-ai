@@ -30,6 +30,7 @@ This is the third stage of the build pipeline: `$clarify-before-build` agrees wh
 - The enforcement model is declared, not implied: hook-owned proof (full pre-push) or gate-owned proof (slim hooks, the PR gate re-proves the exact candidate SHA). Exactly one, recorded in the tooling matrix.
 - Secret scanning is repo-scoped and containerized from day one: resolve the git repo root, mount it read-only, never scan a workspace parent.
 - Coverage thresholds meet or exceed the workspace constitution (`>=90%` unit; critical paths under integration; user actions under browser/E2E). Setup never lowers a standard to make adoption easier — substitutions are documented, not silent.
+- Production build or build-smoke is a first-class proof lane for buildable/runtime repos. Mark it `not-applicable` only when the repo truly has no build artifact or runtime surface, and record the reason.
 - Tool versions and runner images are proof inputs. Prefer pinned versions or digests for scanners, runners, base images, and package-manager tools. If a repo deliberately uses floating tags, record the update policy and the reason in the design.
 - Flakes are testing-foundation defects. Do not encode retry-until-green as proof; define quarantine with expiry, owner, and tracking for any known unstable test before the gate depends on it.
 - Design before mutation. Nothing is installed, rewritten, or committed until the Repo Testing Design is explicitly confirmed.
@@ -38,7 +39,7 @@ This is the third stage of the build pipeline: `$clarify-before-build` agrees wh
 ## Workflow
 
 1. **Gather inputs.** Read the Shared Understanding Contract and feature readiness notes when they exist. Discover repo truth — package scripts, lockfiles, test configs, compose files, hook configs, CI workflows, platform config — using the repo-discovery reference shipped with `$test-readiness-preflight`.
-2. **Build the gap map.** For each area of the standard (test layers, containerization, canonical command, hooks, secret scanning, audits, stubs, seeds, deployment policy, runners/artifacts), classify the repo's current state: `present`, `partial`, `missing`, `substituted`, or `not-applicable` with a reason. Greenfield repos are a gap map where everything is `missing` — same workflow, shorter discovery.
+2. **Build the gap map.** For each area of the standard (test layers, containerization, production build/build-smoke, canonical command, hooks, secret scanning, audits, stubs, seeds, deployment policy, runners/artifacts), classify the repo's current state: `present`, `partial`, `missing`, `substituted`, or `not-applicable` with a reason. Greenfield repos are a gap map where everything is `missing` — same workflow, shorter discovery.
 3. **Draft the Repo Testing Design.** Use `references/repo-testing-design.md` as the contract and `references/repo-artifact-templates.md` for the committed file names and table shapes. Derive the critical-path integration inventory and E2E workflow inventory from the upstream artifacts; the tool matrix starts from the workspace defaults (the adoption template shipped with `$test-readiness-preflight` carries the full table) with substitutions justified per row.
 4. **Confirm.** Present the design and wait for explicit confirmation. Material changes during execution reopen the design.
 5. **Execute in layers.** Follow `references/execution-checklist.md`: acceptance/test ledgers and parallel-work decision → container lanes and inner commands → canonical verify command → fast pre-commit lane → hook installation with active verification → security tooling → stubs, fakes, and seeds → deployment branch policy → bounded runners and artifact paths → the repo agent contract. Verify each layer with its cheap check before the next.
@@ -74,6 +75,7 @@ Do not declare `adopted` while any of these are true:
 - An external provider present in the repo has no stub/fake decision.
 - The enforcement model is undeclared, or a production-bound repo has no deployment branch policy.
 - The canonical gate has not run green since setup completed.
+- A buildable/runtime repo has no containerized production build or build-smoke lane, and no documented `not-applicable` reason.
 - Execution started without a confirmed design (interactive), or a headless run mutated anything at all.
 - The acceptance ledger, test ledger, or parallel-work decision was omitted during execution.
 - Tool/scanner/runner versions are floating without a documented update policy or exception.

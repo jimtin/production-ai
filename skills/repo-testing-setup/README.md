@@ -10,7 +10,7 @@ The third stage of the build pipeline: `$clarify-before-build` agrees *what*, `$
 
 1. **Gathers the inputs**: the Shared Understanding Contract and feature readiness notes (critical paths, providers, workflows fall out of them), plus discovered repo truth.
 2. **Builds a gap map** against the standard — `present / partial / missing / substituted / not-applicable` per area. Greenfield is just a gap map where everything is missing.
-3. **Drafts the Repo Testing Design**: tool matrix, test layers and coverage targets, critical-path and E2E inventories, stub/fake plan for every provider, seeds and resets, the declared enforcement model, pinned tool policy, flake policy, security tooling, deployment branch policy, bounded runners.
+3. **Drafts the Repo Testing Design**: tool matrix, test layers and coverage targets, critical-path and E2E inventories, production build/build-smoke lane, stub/fake plan for every provider, seeds and resets, the declared enforcement model, pinned tool policy, flake policy, security tooling, deployment branch policy, bounded runners.
 4. **Waits for your confirmation.** Nothing mutates from a draft.
 5. **Executes in verified layers**: ledgers and parallel-work decision → container lanes → canonical verify command → fast pre-commit lane → hooks (installed *and proven to fire*) → security tooling → stubs and seeds → deployment policy → runners and artifacts → the repo agent contract.
 6. **Proves it**: fast lane green, then the full canonical gate green, in containers, end to end. Verdict: `adopted`, `adopted-with-exceptions`, or `blocked`.
@@ -25,6 +25,7 @@ The third stage of the build pipeline: `$clarify-before-build` agrees *what*, `$
 - **Gate-owned proof is a first-class model.** When a parent or repo contract says a standalone gate owns exact-SHA proof, developer hooks stay slim and deterministic instead of duplicating the full gate before every push.
 - **Hooks are proven, not just installed.** Layer 4's verification includes committing a deliberate violation to watch the hook actually block it.
 - **Security setup is testing setup.** Repo-scoped containerized gitleaks, dependency audits, vulnerability scans — wired in the same pass, and the setup change itself gets a `$security-threat-model` look, because hook and CI/CD rewiring is attack surface.
+- **Production build is a proof lane.** Buildable/runtime repos need a containerized production build or build-smoke check, not just tests and audits.
 - **Artifacts have predictable names.** The skill commits `docs/testing/repo-testing-design.md`, `tooling-matrix.md`, `critical-path-inventory.md`, `e2e-workflow-inventory.md`, and `adoption-report.md` unless the repo already has a stricter convention.
 - **Tool versions and flakes are part of proof.** Runner/scanner versions are pinned or exceptions are documented; retry-until-green is not accepted proof, and quarantines need expiry, owner, and tracking.
 - **It tells the agents what it built.** The final layer writes the repo-local agent contract — `AGENTS.md` (merged into `CLAUDE.md` for Claude Code) recording the canonical command, enforcement model, and container-only rule — and commits the workflow inventories as repo truth. Hooks enforce; the contract explains; the inventories inform. A rule the contract names must actually exist: no aspirational lines.
