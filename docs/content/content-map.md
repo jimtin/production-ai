@@ -17,6 +17,7 @@ The pipeline from repo artifacts to published content. Each row is one piece; th
 | 9 | **Can your operator answer "what broke" at 2am?** | [error-logging-instrumentation](../../skills/error-logging-instrumentation/) | post | ready |
 | 10 | **Docs that admit what they don't know** — confidence-tagged documentation | [repo-technical-documentation](../../skills/repo-technical-documentation/) | post | ready |
 | 11 | **Analytics without the PII liability** — typed events, intent vs. outcome | [nextjs-vercel-analytics](../../skills/nextjs-vercel-analytics/) | post + code walkthrough | ready |
+| 19 | **Threat models that aren't checklist dumps** — evidence tags, non-capabilities, traced abuse paths | [security-threat-model](../../skills/security-threat-model/) | post | ready |
 
 ## Series 2 — The system (the patterns)
 
@@ -29,6 +30,7 @@ The pipeline from repo artifacts to published content. Each row is one piece; th
 | 16 | **Skills that call skills** — why a graph beats a mega-prompt | [skill-graph](../skill-graph.md) | post | ready |
 | 17 | **Threat-model your own automations** — your agent tooling is attack surface | threat-model files in skills + patterns docs | post | ready |
 | 18 | **How to publish your agent setup without leaking your life** — the fail-closed privacy pipeline | [privacy-scan.sh](../../scripts/privacy-scan.sh), this repo's own story | post | ready |
+| 20 | **I let my agent update my laptop every day** — with a strict do-not-touch list | [laptop-currency-maintenance](../../skills/laptop-currency-maintenance/) | post + video | ready |
 
 ## Backlog / needs work before publishable
 
@@ -36,7 +38,6 @@ The pipeline from repo artifacts to published content. Each row is one piece; th
 |---|---|
 | Case study: a research-report skill with evidence caching, URL revalidation, and tested rendering | Source skill is business-domain; needs a generic rebuild with synthetic fixtures |
 | ChatOps for your gates: a channel-bound review-trigger bot | Bot repo is private; needs extraction into a template |
-| Keeping the dev machine current without breaking repos | Maintenance automation needs generalizing |
 | Anatomy of a real learning-loop summary, line by line | Wants a fabricated-but-realistic example summary |
 
 ## Per-piece checklist

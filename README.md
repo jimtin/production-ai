@@ -26,6 +26,8 @@ Each skill is a self-contained directory under [skills/](skills/) with two layer
 | [repo-technical-documentation](skills/repo-technical-documentation/) | Documentation engine | Docs that assert confidently instead of admitting what is unknown |
 | [nextjs-vercel-analytics](skills/nextjs-vercel-analytics/) | Implementation guide | Analytics instrumentation that quietly ships PII |
 | [pr-production-gate](skills/pr-production-gate/) | Deployment gate | Unproven code reaching production because CI was green-ish |
+| [security-threat-model](skills/security-threat-model/) | Security gate | "Security reviews" that are checklist dumps untraceable to your code |
+| [laptop-currency-maintenance](skills/laptop-currency-maintenance/) | Ops automation | Machine drift breaking builds — or auto-updates breaking the machine |
 
 ## The patterns
 
@@ -78,7 +80,6 @@ This is the public, sanitized derivative of a private setup. Excluded on purpose
 - Client-specific CI integrations and business-domain skills (a market-research/ROI reporting skill, client API contracts).
 - Cached data of any kind — API responses, market data, databases, fixtures with real-world records.
 - Session logs, learning-loop summaries, and automation state — even sanitized ones.
-- A vendored Apache-2.0 threat-modeling skill, pending upstream attribution. Several skills here reference `$security-threat-model`; treat it as bring-your-own until it lands.
 - Real channel IDs, hostnames, repo names, and absolute paths — replaced with placeholders.
 
 The privacy guarantee is structural, not a one-time cleanup: [CI runs a fail-closed denylist sweep plus gitleaks](.github/workflows/ci.yml) on every push, using the same approach as the private setup it came from. Promotion from the private library into this repo is always a manual, reviewed step — never automated.
