@@ -27,6 +27,7 @@ Each skill is a self-contained directory under [skills/](skills/) with two layer
 | [nextjs-vercel-analytics](skills/nextjs-vercel-analytics/) | Implementation guide | Analytics instrumentation that quietly ships PII |
 | [pr-production-gate](skills/pr-production-gate/) | Deployment gate | Unproven code reaching production because CI was green-ish |
 | [security-threat-model](skills/security-threat-model/) | Security gate | "Security reviews" that are checklist dumps untraceable to your code |
+| [repo-testing-setup](skills/repo-testing-setup/) | Foundation gate | Implementation starting on a repo that cannot prove itself — host-run tests, no canonical gate, no security scanning |
 | [laptop-currency-maintenance](skills/laptop-currency-maintenance/) | Ops automation | Machine drift breaking builds — or auto-updates breaking the machine |
 
 ## The patterns

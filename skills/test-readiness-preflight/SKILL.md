@@ -85,7 +85,7 @@ Do not declare `READY`, start the full gate, or proceed to push/release readines
 - A migration is destructive, non-backward-compatible, or requires a backfill/lock-prone operation and there is no explicit expand -> deploy -> contract plan, rollback plan, and user-approved production run step.
 - The deploy path would let the hosting platform or any production runner ship dependent code before the target database migration is confirmed complete.
 - A destructive reset is needed and the user has not approved it (or the run is headless, where resets are never performed).
-- The repo has no clear canonical gate and no defensible fallback set has been assembled.
+- The repo has no clear canonical gate and no defensible fallback set has been assembled — escalate to `$repo-testing-setup` to design and stand up the testing foundation.
 - A security-sensitive change has not had the required threat-model and secret-scan plan.
 - The only available gitleaks command would scan outside the target repo, run directly on a host parent directory, or mount more than the repo root into the scanner.
 - Dependency or tooling versions are stale after being touched and the latest stable version has not been checked.
