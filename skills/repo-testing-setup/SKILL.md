@@ -1,6 +1,6 @@
 ---
 name: repo-testing-setup
-description: Design-then-execute setup of a repository's complete testing and security validation foundation. Containerized lanes for every test layer, a canonical verify command, hook enforcement under a declared model, repo-scoped secret scanning, dependency and image audits, deterministic stubs for external providers, and deployment branch policy. Use after $clarify-before-build and $feature-design-preflight when a new project needs its testing approach designed, when a repo has no canonical containerized gate, when tests run on the host, or when security scanning is missing or mis-scoped. Produces a Repo Testing Design for explicit confirmation, then executes it and proves it with a green canonical gate run. Not for writing feature tests or fixing individual test failures — that is implementation work behind $test-readiness-preflight.
+description: Design-then-execute setup of a repository's complete testing and security validation foundation. Containerized lanes for every test layer, a canonical verify command, hook enforcement under a declared model, repo-scoped secret scanning, dependency and image audits, deterministic stubs for external providers, and deployment branch policy. Use after $clarify-before-build and $feature-design-preflight when a new project needs its testing approach designed, when a repo has no canonical containerized gate, when tests run on the host, or when security scanning is missing or mis-scoped. Produces a Repo Testing Design for explicit confirmation, then executes it, records the rules in the repo's agent contract (AGENTS.md/CLAUDE.md), and proves it with a green canonical gate run. Not for writing feature tests or fixing individual test failures — that is implementation work behind $test-readiness-preflight.
 ---
 
 # Repo Testing Setup
@@ -30,6 +30,7 @@ This is the third stage of the build pipeline: `$clarify-before-build` agrees wh
 - Secret scanning is repo-scoped and containerized from day one: resolve the git repo root, mount it read-only, never scan a workspace parent.
 - Coverage thresholds meet or exceed the workspace constitution (`>=90%` unit; critical paths under integration; user actions under browser/E2E). Setup never lowers a standard to make adoption easier — substitutions are documented, not silent.
 - Design before mutation. Nothing is installed, rewritten, or committed until the Repo Testing Design is explicitly confirmed.
+- The setup is not done until agents are told about it. The repo-local agent contract (`AGENTS.md`, merged into `CLAUDE.md` where Claude Code is in use) must record what the foundation established — the canonical verify command as the only acceptable full proof, the declared enforcement model, container-only validation, coverage thresholds, stub policy, the secret-scan wrapper, and the deployment policy. It states only commands and rules that actually exist: no aspirational lines.
 
 ## Workflow
 
@@ -37,9 +38,9 @@ This is the third stage of the build pipeline: `$clarify-before-build` agrees wh
 2. **Build the gap map.** For each area of the standard (test layers, containerization, canonical command, hooks, secret scanning, audits, stubs, seeds, deployment policy, runners/artifacts), classify the repo's current state: `present`, `partial`, `missing`, `substituted`, or `not-applicable` with a reason. Greenfield repos are a gap map where everything is `missing` — same workflow, shorter discovery.
 3. **Draft the Repo Testing Design.** Use `references/repo-testing-design.md` as the contract. Derive the critical-path integration inventory and E2E workflow inventory from the upstream artifacts; the tool matrix starts from the workspace defaults (the adoption template shipped with `$test-readiness-preflight` carries the full table) with substitutions justified per row.
 4. **Confirm.** Present the design and wait for explicit confirmation. Material changes during execution reopen the design.
-5. **Execute in layers.** Follow `references/execution-checklist.md`: container lanes and inner commands → canonical verify command → fast pre-commit lane → hook installation with active verification → security tooling → stubs, fakes, and seeds → deployment branch policy → bounded runners and artifact paths. Verify each layer with its cheap check before the next.
+5. **Execute in layers.** Follow `references/execution-checklist.md`: container lanes and inner commands → canonical verify command → fast pre-commit lane → hook installation with active verification → security tooling → stubs, fakes, and seeds → deployment branch policy → bounded runners and artifact paths → the repo agent contract. Verify each layer with its cheap check before the next.
 6. **Prove it.** Run the fast lane, then the full canonical gate, in containers, to green. A setup whose own gate has never passed is not a setup.
-7. **Record and hand off.** Commit the tooling matrix and the design document into the repo (e.g. `docs/testing/`). Declare the verdict. From here, `$test-readiness-preflight` has a canonical gate to preflight, and the repo is eligible for `$pr-production-gate` configuration.
+7. **Record and hand off.** Commit the tooling matrix, the design document, and the critical-path and E2E workflow inventories into the repo (e.g. `docs/testing/`) — they become the repo-native truth that `$user-action-coverage-review` and the gate read instead of re-deriving. Declare the verdict. From here, `$test-readiness-preflight` has a canonical gate to preflight, and the repo is eligible for `$pr-production-gate` configuration.
 
 ## Security Setup
 
@@ -71,6 +72,8 @@ Do not declare `adopted` while any of these are true:
 - The canonical gate has not run green since setup completed.
 - Execution started without a confirmed design (interactive), or a headless run mutated anything at all.
 - The design document and tooling matrix are not committed to the repo.
+- The repo-local agent contract does not record the canonical gate, the enforcement model, and the container-only rule — or records commands that do not exist.
+- The critical-path and E2E workflow inventories are not committed as repo-native files.
 
 ## Example Prompts
 
