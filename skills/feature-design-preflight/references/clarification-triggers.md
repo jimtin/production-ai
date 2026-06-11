@@ -34,6 +34,11 @@ Ask before coding when the next engineering step depends on one of these decisio
 - Acceptance criteria are too vague to produce meaningful tests.
 - The feature cannot meet workspace coverage, integration, E2E, security, or local-container requirements without extra scope.
 
+## Recurrence and Production Evidence
+
+- The same feature class has failed before because a requirement was not traced through provider limits, file size, timeout, dependency, or failure behavior. Stop and clarify the concrete production constraint before coding.
+- Production runtime reports show quota, transient database, provider, or connection-limit failures in the affected area. Treat resilience as part of the requirement: define graceful degradation, retry/backoff behavior, alerting, and tests before implementing the fix.
+
 ## How to Ask
 
 Use a short format:
@@ -48,5 +53,3 @@ Example:
 ```text
 The upload requirement does not state expected file size or whether uploads must survive a network interruption. I recommend designing for direct/resumable upload because video files are likely too large for a normal request body. Proceeding with a simple API upload risks production failures. What maximum file size and retry/resume behavior should this support?
 ```
-- The same feature class has failed before because a requirement was not traced through provider limits, file size, timeout, dependency, or failure behavior. Stop and clarify the concrete production constraint before coding.
-- If production runtime reports show quota, transient database, provider, or connection-limit failures, treat resilience as part of the requirement: define graceful degradation, retry/backoff behavior, alerting, and tests before implementing the fix.

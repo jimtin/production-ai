@@ -37,6 +37,7 @@ Check limits where they matter:
 
 - File size, payload size, request duration, response duration, memory, CPU, disk, temp storage, and streaming behavior
 - Provider API limits, quotas, pricing tiers, rate limits, concurrency, polling rules, and webhook behavior
+- Cost at expected scale, pricing-tier boundaries, and the usage level at which the design must change
 - SDK and library capability limits, supported formats, platform compatibility, security posture, and maintenance status
 - Browser limitations, mobile constraints, slow networks, offline behavior, accessibility, and localization
 - Data retention, deletion, privacy, tenant isolation, encryption, and auditability
