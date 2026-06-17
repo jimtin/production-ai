@@ -29,6 +29,7 @@ Each skill has two layers:
 | security-threat-model | Security gate | [guide](docs/skills/security-threat-model.md) | [payload](skills/security-threat-model/) |
 | repo-testing-setup | Foundation gate | [guide](docs/skills/repo-testing-setup.md) | [payload](skills/repo-testing-setup/) |
 | laptop-currency-maintenance | Ops automation | [guide](docs/skills/laptop-currency-maintenance.md) | [payload](skills/laptop-currency-maintenance/) |
+| docker-disk-cleanup | Ops automation | [guide](docs/skills/docker-disk-cleanup.md) | [payload](skills/docker-disk-cleanup/) |
 
 ## The patterns
 

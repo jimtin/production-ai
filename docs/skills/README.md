@@ -20,3 +20,4 @@ The installable Codex payloads live separately under `skills/<name>/`. Install t
 | security-threat-model | Security gate | [guide](security-threat-model.md) | [payload](../../skills/security-threat-model/) |
 | repo-testing-setup | Foundation gate | [guide](repo-testing-setup.md) | [payload](../../skills/repo-testing-setup/) |
 | laptop-currency-maintenance | Ops automation | [guide](laptop-currency-maintenance.md) | [payload](../../skills/laptop-currency-maintenance/) |
+| docker-disk-cleanup | Ops automation | [guide](docker-disk-cleanup.md) | [payload](../../skills/docker-disk-cleanup/) |

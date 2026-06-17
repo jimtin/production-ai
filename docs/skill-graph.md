@@ -27,6 +27,7 @@ graph TD
     end
     subgraph Operational
         LCM[laptop-currency-maintenance]
+        DDC[docker-disk-cleanup]
     end
 
     CBB --> FDQ

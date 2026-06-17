@@ -35,6 +35,7 @@ The pipeline from repo artifacts to published content. Each row is one piece; th
 | 18 | **How to publish your agent setup without leaking your life** — the fail-closed privacy pipeline | [privacy-scan.sh](../../scripts/privacy-scan.sh), this repo's own story | post | ready |
 | 20 | **I let my agent update my laptop every day** — with a strict do-not-touch list | [laptop-currency-maintenance](../../skills/laptop-currency-maintenance/) | post + video | ready |
 | 21 | **Anatomy of a learning-loop summary** — what your agent's nightly self-report actually says | [learning-loop-summary-example](../patterns/learning-loop-summary-example.md) | post | ready |
+| 23 | **My Docker cleanup has a safety contract** — daily disk recovery without wrecking active gates | [docker-disk-cleanup](../../skills/docker-disk-cleanup/) | post + video | ready |
 
 ## Backlog / needs work before publishable
 

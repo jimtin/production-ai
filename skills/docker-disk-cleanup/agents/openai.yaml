@@ -1,0 +1,4 @@
+interface:
+  display_name: "Docker Disk Cleanup"
+  short_description: "Safely reclaim Docker disk space"
+  default_prompt: "Use $docker-disk-cleanup to conservatively reclaim Docker disk space, preserving active services and gate work."
