@@ -14,6 +14,13 @@ Builds and writes `<target>-threat-model.md` for a repo, subsystem, or automatio
 4. A short list of real abuse paths, classified (`access / exfiltration / integrity / execution / availability / detection-evasion`) and prioritized by justified likelihood × impact, adjusted for evidenced controls.
 5. Interactive assumption validation when a user is available, or explicit `unvalidated` assumptions in headless gate runs.
 6. Mitigations in two never-merged lists: existing (with evidence) and recommended (with a location and control type).
+7. A lightweight report-contract check so generated reports prove their structure before they are handed back.
+
+## The bundled support
+
+- `references/example-report.md` — a compact example showing the expected evidence density.
+- `references/surface-checklists.md` — prompts for common web, agent, LLM, CI/CD, provider-token, file/media, and scheduled-job surfaces.
+- `scripts/threat-model-report-check.mjs` — a structural checker for generated reports.
 
 ## The design choices worth stealing
 
@@ -22,12 +29,26 @@ Builds and writes `<target>-threat-model.md` for a repo, subsystem, or automatio
 - **Runtime ≠ CI ≠ dev.** Three surfaces, three different attackers, three blast radii — modeled separately instead of smeared together.
 - **Assumption validation without deadlock.** Ranking-critical assumptions go to the user as 1–3 targeted questions when a user is available; headless PR gates record those assumptions as `unvalidated`, mark affected priorities conditional, and fail closed only when the unknown prevents a defensible risk decision. Same house pattern as [clarify-before-build](clarify-before-build.md).
 - **Few threats, fully traced.** The completion blockers kill checklist dumps: any threat that can't name its entrypoint, boundary, and asset doesn't ship.
+- **Dismissed boundaries are allowed.** A boundary does not need a fake abuse path; it can be marked low relevance with evidence. Forced findings are just another kind of noise.
 - **It's the library's security escalation point.** Seven other skills route to `$security-threat-model` when scope turns sensitive — see [docs/skill-graph.md](../../docs/skill-graph.md).
+
+## Bad finding vs. good abuse path
+
+Bad:
+
+> Validate webhook inputs.
+
+Good:
+
+> `AP-1`: Replay a valid provider event through `POST /api/webhooks/payments` -> webhook boundary without event-id idempotency -> invoice payment state. Class: `integrity`. Likelihood: `medium` because the route is public and replay storage was not found. Impact: `high` because duplicate state transitions can corrupt billing. Mitigation: persist processed provider event IDs before invoice mutation.
+
+The good version names the entrypoint, boundary, asset, class, likelihood, impact, existing evidence gap, and exact mitigation location.
 
 ## Install
 
 ```bash
 scripts/install-skill.sh security-threat-model
+node ~/.codex/skills/security-threat-model/scripts/threat-model-report-check.mjs <target>-threat-model.md
 ```
 
 Triggers on threat-modeling and attack-surface requests, and via escalation from the other gates.

@@ -67,7 +67,7 @@ for skill in sorted(p for p in skills_dir.iterdir() if p.is_dir()):
         for needle in ("interface:", "display_name:", "short_description:", "default_prompt:"):
             if needle not in metadata:
                 errors.append(f"{label}: agents/openai.yaml missing '{needle}'")
-    for ref in sorted(set(re.findall(r"(?:references|scripts)/[A-Za-z0-9_\-./]+\.(?:md|py|json|sh)", text))):
+    for ref in sorted(set(re.findall(r"(?:references|scripts)/[A-Za-z0-9_\-./]+\.(?:md|py|json|sh|mjs|js)", text))):
         if not (skill / ref).exists():
             errors.append(f"{label}: SKILL.md mentions '{ref}' but the file does not exist")
 

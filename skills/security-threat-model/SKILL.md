@@ -26,14 +26,14 @@ The quality bar: a reader who knows the repo should recognize every component, a
 ## Workflow
 
 1. **Scope the target.** Record the repo or path in scope, what is explicitly out of scope, how the system runs (server, CLI, worker, library, agent automation), deployment model, and internet exposure as far as evidence shows.
-2. **Build the system model.** Enumerate components, entrypoints (endpoints, upload surfaces, parsers, job triggers, admin tooling, webhooks), data stores, and external integrations — each with a file-path evidence reference and a confidence tag.
+2. **Build the system model.** Enumerate components, entrypoints (endpoints, upload surfaces, parsers, job triggers, admin tooling, webhooks), data stores, and external integrations — each with a file-path evidence reference and a confidence tag. Use `references/surface-checklists.md` when the target touches modern web, agent, CI/CD, file/media, LLM, scheduler, or provider-token surfaces.
 3. **Derive boundaries and assets.** Trust boundaries are concrete edges between components: note the protocol, authentication, validation, and rate limiting observed on each. Assets are whatever drives real risk: credentials, tokens, PII, tenant data, integrity-critical state, deploy/CI control, compute, audit logs. Use `references/boundaries-assets-controls.md` when surveying.
 4. **Calibrate the attacker.** From exposure and usage, state what a realistic attacker can do (anonymous internet client, authenticated tenant, malicious PR author, compromised dependency) and what they cannot. Non-capabilities are part of the model.
 5. **Enumerate abuse paths.** For each attacker goal, trace the path: entrypoint → boundary crossed → asset reached → impact. Classify each path with the closed taxonomy below. Keep the list short and real.
 6. **Prioritize.** Assign likelihood and impact (`low / medium / high`, one line of justification each), then priority `critical / high / medium / low` from the combination, adjusted for existing controls that have evidence. Name the assumptions that most influence the ranking.
 7. **Validate assumptions.** In interactive work, present the ranking-critical assumptions and up to 3 questions (exposure, tenancy, data sensitivity, who can trigger what), then wait for answers before finalizing. In headless or gate contexts, record those assumptions as unvalidated instead of waiting.
 8. **Recommend mitigations.** Two lists, never merged: existing mitigations with their evidence, and recommended mitigations each tied to an abuse path, a concrete location, and a control type (authorization check, schema validation, sandboxing, rate limit, secret isolation, audit logging, etc.).
-9. **Write the report.** Follow `references/report-contract.md` and save `<target-name>-threat-model.md` at the target root (use the in-scope directory's basename when modeling a subpath).
+9. **Write and check the report.** Follow `references/report-contract.md` and save `<target-name>-threat-model.md` at the target root (use the in-scope directory's basename when modeling a subpath). Read `references/example-report.md` when quality alignment is needed. When available, run `scripts/threat-model-report-check.mjs <report-path>` before delivery and fix contract failures rather than explaining them away.
 
 ## Abuse-Path Taxonomy
 
@@ -51,7 +51,7 @@ Classify every path as one or more of:
 The model is not complete until:
 
 - Every discovered entrypoint was considered, and each is either represented in a threat or marked low-relevance with a reason.
-- Every trust boundary appears in at least one abuse path.
+- Every trust boundary appears in at least one abuse path or is explicitly dismissed with a low-relevance reason.
 - Runtime, CI/build, and dev/test surfaces are separated.
 - The attacker profile lists non-capabilities, not just capabilities.
 - Assumptions and open questions are explicit and tagged.
@@ -73,9 +73,11 @@ Do not deliver the threat model while any of these are true:
 - A material architectural claim lacks evidence or a confidence tag.
 - A priority was assigned without recorded likelihood and impact reasoning.
 - The abuse-path list is a generic checklist not traceable to this system's boundaries and assets.
+- A discovered trust boundary is neither traced through an abuse path nor dismissed with evidence-backed low relevance.
 - Ranking-critical assumptions were neither validated interactively nor recorded as unvalidated/conditional in a headless context.
 - Existing and recommended mitigations are mixed into one list.
 - The report file was not written, or deviates from `references/report-contract.md` without the user asking for a different format.
+- `scripts/threat-model-report-check.mjs` was available but not run, or reported failures that were left unresolved.
 
 ## Example Prompts
 
@@ -89,6 +91,9 @@ Do not deliver the threat model while any of these are true:
 
 - `references/report-contract.md`: required report structure and section contracts.
 - `references/boundaries-assets-controls.md`: survey lists for boundaries, assets, and control types by surface.
+- `references/surface-checklists.md`: focused prompts for common web, agent, CI/CD, LLM, file/media, and provider-token surfaces.
+- `references/example-report.md`: compact example showing the expected evidence density and report shape.
+- `scripts/threat-model-report-check.mjs`: lightweight structural checker for generated reports.
 
 ## Used By
 
