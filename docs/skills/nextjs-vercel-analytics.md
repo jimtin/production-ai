@@ -4,6 +4,10 @@
 
 This skill implements Vercel Web Analytics in Next.js behind a typed, no-PII event contract shared by frontend and backend.
 
+## Video
+
+Published companion: [What If Your AI Code Fixed Its Own Tech Debt?](https://www.youtube.com/watch?v=_lQJIqvI8_s) introduces the Production AI system this implementation guide plugs into. A dedicated analytics video is not published yet.
+
 ## What it does
 
 1. **Establish the starting point**: router mode (App vs. Pages), existing instrumentation (`rg` for analytics/telemetry vendors), current official docs and package version — *checked at implementation time, never from model memory* — and whether the project actually has the custom-events entitlement.

@@ -4,6 +4,10 @@
 
 This skill gives "full review" a fixed, repeatable meaning: an evidence-backed report plus prioritized remediation plan, produced without mutating anything — and the same repo state always yields the same overall verdict.
 
+## Video
+
+Published companion: [What If Your AI Code Fixed Its Own Tech Debt?](https://www.youtube.com/watch?v=_lQJIqvI8_s) introduces the Production AI proof system this orchestrator pulls together.
+
 ## What it does
 
 1. **Baseline the repo** with cheap static inspection (manifests, routes, tests, configs, deployment files) — expensive gates are identified, not launched.

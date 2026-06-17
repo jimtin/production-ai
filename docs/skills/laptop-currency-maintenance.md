@@ -4,6 +4,10 @@
 
 This skill automates machine currency with a **strict do-not-touch list** — and ships the actual tested automation tool, not just instructions.
 
+## Video
+
+Published companion: [What If Your AI Code Fixed Its Own Tech Debt?](https://www.youtube.com/watch?v=_lQJIqvI8_s) discusses self-updating systems and the maintenance loop this skill supports.
+
 ## What it does
 
 A daily audit-first maintenance pass:

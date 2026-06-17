@@ -4,6 +4,10 @@
 
 This skill makes the agent refuse to start building while the plan is still vibes.
 
+## Video
+
+Published companion: [What If Your AI Code Fixed Its Own Tech Debt?](https://www.youtube.com/watch?v=_lQJIqvI8_s) introduces the Production AI skill ecosystem and shows where `clarify-before-build` fits as the planning gate.
+
 ## What it does
 
 Turns planning requests into a question-led gate. The agent must:

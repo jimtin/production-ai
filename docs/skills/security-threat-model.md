@@ -4,6 +4,10 @@
 
 This skill produces a threat model that is *specific*: every component cited to a file, every threat traced through a real boundary to a real asset, every severity justified, and the attacker explicitly told what they *cannot* do.
 
+## Video
+
+Published companion: [What If Your AI Code Fixed Its Own Tech Debt?](https://www.youtube.com/watch?v=_lQJIqvI8_s) introduces threat modeling as one of the Production AI gates that keeps agent-built systems secure by design.
+
 ## What it does
 
 Builds and writes `<target>-threat-model.md` for a repo, subsystem, or automation:

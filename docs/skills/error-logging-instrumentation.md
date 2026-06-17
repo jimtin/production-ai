@@ -4,6 +4,10 @@
 
 This skill audits (and on request, fixes) error logging against one standard: *can an operator answer "what failed, where, why, for whom, and what next" without reading sensitive data?*
 
+## Video
+
+Published companion: [What If Your AI Code Fixed Its Own Tech Debt?](https://www.youtube.com/watch?v=_lQJIqvI8_s) introduces logging as part of the Production AI proof system this skill hardens.
+
 ## What it does
 
 1. **Baseline the app**: framework, routes, server actions, jobs, auth, uploads, providers, existing logging. A static inventory script (`scripts/logging_inventory.py`) collects evidence — explicitly evidence only, never the sufficiency verdict.

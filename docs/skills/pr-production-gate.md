@@ -4,6 +4,10 @@
 
 This skill is the contract for a fully automatic, fail-closed PR review and production deployment gate that runs on your own machine — and, just as importantly, the contract for a gate that's *cheap enough to leave on*. The architecture write-up lives at [docs/patterns/pr-production-gate.md](../../docs/patterns/pr-production-gate.md).
 
+## Video
+
+Published companion: [Stop Trusting Your AI Agent: Build a GitHub CI/CD Pipeline](https://www.youtube.com/watch?v=A-A2WY4JuSU) covers the move from trusting an agent to making it prove changes through a pipeline. This skill is the stricter local-first deployment-gate version used by this repo.
+
 ## What it does
 
 Defines the required behavior for a scheduled gate that:

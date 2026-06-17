@@ -4,6 +4,10 @@
 
 This skill defines frontend "done" as *verified usable across real viewports, with screenshot evidence*.
 
+## Video
+
+Published companion: [What If Your AI Code Fixed Its Own Tech Debt?](https://www.youtube.com/watch?v=_lQJIqvI8_s) covers the broader Production AI quality system this frontend gate extends.
+
 ## What it does
 
 A quality bar for building, changing, or reviewing UI:

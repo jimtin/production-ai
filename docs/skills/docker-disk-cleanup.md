@@ -4,6 +4,10 @@
 
 This skill is the daily, conservative Docker cleanup lane. It treats disk cleanup as operational work with a report, a lock, and a narrow deletion boundary.
 
+## Video
+
+Published companion: [What If Your AI Code Fixed Its Own Tech Debt?](https://www.youtube.com/watch?v=_lQJIqvI8_s) covers the broader Production AI operating model this maintenance skill supports. A dedicated Docker cleanup video is not published yet.
+
 ## What it does
 
 1. **Audits first**: filesystem free space, Docker daemon status, `docker system df`, containers, and volumes.

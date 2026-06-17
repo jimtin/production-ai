@@ -4,6 +4,10 @@
 
 This skill forces the requirement through reality *before* code: platform limits, provider capabilities, data flow, failure modes, schema sequencing, and proof.
 
+## Video
+
+Published companion: [What If Your AI Code Fixed Its Own Tech Debt?](https://www.youtube.com/watch?v=_lQJIqvI8_s) introduces the skill ecosystem this design gate belongs to.
+
 ## What it does
 
 Produces an **implementation readiness note** with an explicit status — `READY` with concrete decisions, `CONDITIONAL` with safe defaults and listed assumptions, or `BLOCKED` with the exact clarifications needed. On the way there the agent must:
