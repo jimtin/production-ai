@@ -4,6 +4,13 @@
 
 This skill designs and stands up how a repository proves itself — then refuses to call itself done until the new canonical gate runs green.
 
+## Video
+
+Published companions:
+
+- [How to Actually Scale Your Agentic AI Workflows](https://www.youtube.com/watch?v=FlaiPTj7ifA) covers the local automated testing layers this skill turns into a repo foundation.
+- [Stop Trusting Your AI Agent: Build a GitHub CI/CD Pipeline](https://www.youtube.com/watch?v=A-A2WY4JuSU) covers the broader proof-pipeline mindset that this repo implements with local-first gates.
+
 ## What it does
 
 The third stage of the build pipeline: `$clarify-before-build` agrees *what*, `$feature-design-preflight` designs *how it survives reality*, and this skill builds *how it gets proven* — before feature implementation begins.

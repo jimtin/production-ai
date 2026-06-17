@@ -4,6 +4,10 @@
 
 This skill builds the inventory the test suite should have been built from: every user action, mapped to evidence.
 
+## Video
+
+Published companion: [How to Actually Scale Your Agentic AI Workflows](https://www.youtube.com/watch?v=FlaiPTj7ifA) covers the end-to-end testing discipline this skill makes explicit at the user-action level.
+
 ## What it does
 
 After a plan is accepted and before implementation starts (and again before final validation if scope changed), the agent must produce an **action matrix**:

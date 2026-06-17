@@ -87,9 +87,16 @@ This is the public, sanitized derivative of a private setup. Excluded on purpose
 
 The privacy guarantee is structural, not a one-time cleanup: [CI runs a fail-closed denylist sweep plus gitleaks](.github/workflows/ci.yml) on every push, using the same approach as the private setup it came from. Promotion from the private library into this repo is always a manual, reviewed step — never automated.
 
-## Creating content from this repo
+## Published videos
 
-The [content map](docs/content/content-map.md) tracks which artifacts are ready to become posts, videos, or talks, with the hook for each. The [glossary](docs/content/glossary.md) keeps terminology consistent across pieces. Each [skill guide](docs/skills/) is structured to be the first draft of its own article.
+The public companion channel is [Building The Age of AI](https://www.youtube.com/@building-the-age-of-ai). Published videos that map to this repo:
+
+| Video | What it covers | Related artifacts |
+|---|---|---|
+| [What It Actually Takes to Build the Age of AI](https://www.youtube.com/watch?v=ZxtLxXH-r4U) | Channel introduction: why building reliable AI systems is a systems-design problem, not just a prompting problem. | [Skill anatomy](docs/skill-anatomy.md), [skill graph](docs/skill-graph.md) |
+| [How to Actually Scale Your Agentic AI Workflows](https://www.youtube.com/watch?v=FlaiPTj7ifA) | Local automated testing, regression protection, security scans, unit/integration/E2E layers, and Docker as the execution boundary. | [repo-testing-setup](docs/skills/repo-testing-setup.md), [test-readiness-preflight](docs/skills/test-readiness-preflight.md) |
+| [Stop Trusting Your AI Agent: Build a GitHub CI/CD Pipeline](https://www.youtube.com/watch?v=A-A2WY4JuSU) | Version control, CI/CD framing, and the move from trusting the agent to making it run checks. | [pr-production-gate](docs/skills/pr-production-gate.md), [repo-testing-setup](docs/skills/repo-testing-setup.md) |
+| [What If Your AI Code Fixed Its Own Tech Debt?](https://www.youtube.com/watch?v=_lQJIqvI8_s) | The Production AI skill ecosystem: planning, testing, logging, threat modeling, CI/CD, self-improvement, and reducing technical debt. | [The library](#the-library), [learning loop](docs/patterns/learning-loop.md) |
 
 ## License
 

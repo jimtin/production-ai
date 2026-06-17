@@ -4,6 +4,10 @@
 
 This skill produces documentation where every material claim carries its epistemic status.
 
+## Video
+
+Published companion: [What If Your AI Code Fixed Its Own Tech Debt?](https://www.youtube.com/watch?v=_lQJIqvI8_s) frames why technical debt reduction needs current, evidence-bound repo knowledge.
+
 ## What it does
 
 Exhaustively documents a repo's technical reality — API endpoints, UI routes, frameworks and rationale, data models, integrations, jobs, testing, deployment, operations — as a split-doc package (default under `docs/repo-map/`) plus a machine-readable `evidence.json`:

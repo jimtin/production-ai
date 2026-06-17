@@ -4,6 +4,10 @@
 
 This skill converts predictable validation failures into implementation tasks *before* the expensive gate runs. The core inversion: **the full gate confirms readiness — it is never the discovery mechanism.**
 
+## Video
+
+Published companion: [How to Actually Scale Your Agentic AI Workflows](https://www.youtube.com/watch?v=FlaiPTj7ifA) covers the local testing pipeline this skill protects from predictable, expensive failures.
+
 ## What it does
 
 A mandatory cheap pass before full-suite/container/E2E/push validation, ending in a status-coded verdict — `READY` (checklist clean, exact gate command named), `CONDITIONAL` (start, with named residual risks), or `BLOCKED` (a task list, not a complaint):

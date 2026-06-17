@@ -4,6 +4,10 @@
 
 This skill makes removal a proof exercise: map live behavior first, classify every candidate with evidence, remove in tested layers.
 
+## Video
+
+Published companion: [What If Your AI Code Fixed Its Own Tech Debt?](https://www.youtube.com/watch?v=_lQJIqvI8_s) frames the technical-debt problem this skill addresses when old code needs to be removed without losing behavior.
+
 ## What it does
 
 1. **Baseline the repo** from current truth — runtime config, package scripts, deployment config, tests — not historical docs.
