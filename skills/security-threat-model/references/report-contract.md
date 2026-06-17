@@ -24,6 +24,9 @@ Separate tables (or clearly marked rows) for runtime vs. CI/build vs. dev/test s
 | Boundary | From → To | Protections observed (auth, validation, rate limits) | Gaps | Evidence |
 |---|---|---|---|---|
 
+Every discovered boundary must be either represented in section 7 or explicitly dismissed here with
+an evidence-backed low-relevance reason. Do not invent abuse paths just to satisfy coverage.
+
 ## 5. Assets
 
 | Asset | Where it lives | Why it drives risk |
@@ -41,6 +44,8 @@ Two explicit lists: **capabilities** (what a realistic attacker in this deployme
 - `Class` uses the skill's closed taxonomy (`access / exfiltration / integrity / execution / availability / detection-evasion`).
 - `Likelihood` and `Impact` are `low / medium / high`, each justified in one line below the table or in the row.
 - `Priority` is `critical / high / medium / low`, adjusted for evidenced controls.
+- If no plausible abuse path exists for a boundary, record the dismissal in section 4 instead of
+  adding a forced low-quality finding.
 
 ## 8. Recommended Mitigations
 
