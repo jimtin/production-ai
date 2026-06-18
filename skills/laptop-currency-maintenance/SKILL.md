@@ -17,6 +17,8 @@ Use this skill to keep host developer tooling current while preserving repo safe
 - Do not use `sudo`.
 - Do not auto-update Homebrew casks, macOS system updates, App Store apps, Docker Desktop, repo dependencies, lockfiles, language runtime managers, or global npm packages.
 - Skip and report pinned Homebrew formulae, unavailable tools, casks, and failed checks.
+- Highlight configured `highImpactFormulae` in reports when they are outdated.
+- Use `completed_with_warnings` when audits complete but checks are unavailable or fail.
 - Treat repo dependency upgrades as implementation work: they need repo-local planning, `$test-readiness-preflight`, local/container validation, dependency audit, repo-scoped containerized gitleaks, and `$security-threat-model` when push/readiness is in scope.
 - Disk cleanup is not package currency proof. Use this skill for version freshness and package drift.
 - Sanitize reports and Discord messages. Do not print tokens, auth headers, env values, provider IDs, or secret-looking strings.
@@ -47,3 +49,4 @@ It should post to the configured Discord channel (`<DISCORD_CHANNEL_ID>` in the 
 - The tool attempts to upgrade casks, repo packages, lockfiles, global npm packages, macOS updates, App Store apps, or Docker Desktop.
 - A repo dependency recommendation is reported as completed without repo-local validation.
 - Report output includes unredacted secrets or provider identifiers.
+- Report output exposes local absolute home paths in Discord or Markdown summaries.

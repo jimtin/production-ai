@@ -1,0 +1,27 @@
+# Example agent-harness automation definition for laptop-currency-maintenance.
+# Copy and adapt this after installing the skill with:
+#   scripts/install-skill.sh laptop-currency-maintenance
+
+version = 1
+id = "laptop-currency-maintenance"
+kind = "cron"
+name = "Laptop Currency Maintenance"
+
+prompt = """
+Run the installed laptop currency maintenance skill automation:
+
+1. Work from `~/.codex/skills/laptop-currency-maintenance/scripts`.
+2. Confirm `config.json` exists. If it does not, stop and report that `config.example.json` must be copied to `config.json` with absolute paths.
+3. Run `node laptop-currency-maintenance.mjs update`.
+4. Report status, upgraded/planned Homebrew formulae, warning count, report paths, Discord status, and any blockers.
+5. Fail closed on command errors. Do not use sudo. Do not mutate repo manifests, lockfiles, casks, global npm packages, language runtime managers, Docker Desktop, macOS updates, or App Store apps.
+"""
+
+status = "PAUSED"
+rrule = "FREQ=DAILY;BYHOUR=7;BYMINUTE=0;BYSECOND=0"
+
+model = "<model-id>"
+reasoning_effort = "low"
+
+execution_environment = "local"
+cwds = ["~/.codex/skills/laptop-currency-maintenance/scripts"]
