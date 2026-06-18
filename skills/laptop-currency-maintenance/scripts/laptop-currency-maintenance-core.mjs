@@ -62,6 +62,10 @@ export async function commandExists(command, runner = runCommand) {
 export function sanitizeText(input, token = '') {
   let out = String(input || '');
   if (token) out = out.split(token).join('[REDACTED_DISCORD_BOT_TOKEN]');
+  const home = process.env.HOME || '';
+  if (home) out = out.split(home).join('~');
+  out = out.replace(/\/Users\/[^/\s`'")]+/g, '~');
+  out = out.replace(/\/home\/[^/\s`'")]+/g, '~');
   out = out.replace(/@everyone/g, '@\u200beveryone').replace(/@here/g, '@\u200bhere');
   out = out.replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, '[REDACTED_EMAIL]');
   out = out.replace(/Bearer\s+[A-Za-z0-9._~+/=-]+/gi, 'Bearer [REDACTED]');
@@ -127,18 +131,20 @@ export function classifyVersionGap(current, latest) {
   return 'current';
 }
 
-export function classifyBrewFormula(formula, pinnedNames = new Set(), info = null) {
+export function classifyBrewFormula(formula, pinnedNames = new Set(), info = null, options = {}) {
   const name = formula.name;
   const installed = formula.installed_versions || info?.installed || [];
   const current = installed[installed.length - 1] || null;
   const latest = formula.current_version || info?.stable || null;
   const pinned = Boolean(formula.pinned || info?.pinned || pinnedNames.has(name));
+  const highImpactNames = options.highImpactNames || new Set();
   return {
     name,
     installed,
     current,
     latest,
     pinned,
+    highImpact: highImpactNames.has(name),
     gap: classifyVersionGap(current, latest),
     action: pinned ? 'skip_pinned' : 'auto_upgrade_formula'
   };
@@ -154,23 +160,34 @@ export async function brewSnapshot(config, runner = runCommand) {
   const cleanupResult = await runner('brew', ['cleanup', '-n'], { timeoutMs: 180000, maxBuffer: 30 * 1024 * 1024 });
   const outdated = parseBrewOutdated(outdatedResult.stdout);
   const pinnedNames = parsePinnedList(pinnedResult.stdout);
+  const highImpactNames = new Set(config.homebrew?.highImpactFormulae || []);
   let infoByName = new Map();
+  let infoCommand = null;
 
   if (outdated.formulae.length) {
     const names = outdated.formulae.map((item) => item.name).filter(Boolean);
     const infoResult = await runner('brew', ['info', '--json=v2', '--formula', ...names], { timeoutMs: 180000, maxBuffer: 30 * 1024 * 1024 });
+    infoCommand = commandSummary(infoResult);
     infoByName = parseBrewInfo(infoResult.stdout);
   }
+  const commands = {
+    outdated: commandSummary(outdatedResult),
+    pinned: commandSummary(pinnedResult),
+    leaves: commandSummary(leavesResult),
+    cleanupDryRun: commandSummary(cleanupResult)
+  };
+  if (infoCommand) commands.info = infoCommand;
 
   return {
     available: true,
-    commands: {
-      outdated: commandSummary(outdatedResult),
-      pinned: commandSummary(pinnedResult),
-      leaves: commandSummary(leavesResult),
-      cleanupDryRun: commandSummary(cleanupResult)
-    },
-    formulae: outdated.formulae.map((formula) => classifyBrewFormula(formula, pinnedNames, infoByName.get(formula.name))),
+    ok: Object.values(commands).every((command) => command.ok),
+    commands,
+    formulae: outdated.formulae.map((formula) => classifyBrewFormula(
+      formula,
+      pinnedNames,
+      infoByName.get(formula.name),
+      { highImpactNames }
+    )),
     casks: outdated.casks.map((cask) => ({
       name: cask.name,
       installed: cask.installed_versions || [],
@@ -433,6 +450,9 @@ export async function runBrewUpgrade(config, dryRun, runner = runCommand) {
 
   if (dryRun) {
     const snapshot = await brewSnapshot(config, runner);
+    if (snapshot.available && snapshot.ok === false) {
+      return { ok: false, failedClosed: true, dryRun: true, commands: [], error: 'brew audit failed before dry-run upgrade', upgradedFormulae: [] };
+    }
     const formulae = (snapshot.formulae || []).filter((item) => item.action === 'auto_upgrade_formula').map((item) => item.name);
     const upgradeArgs = formulae.length ? ['upgrade', '--dry-run', '--formula', ...formulae] : ['upgrade', '--dry-run', '--formula'];
     const upgradePlan = await runner('brew', upgradeArgs, { timeoutMs: 180000, maxBuffer: 30 * 1024 * 1024 });
@@ -446,6 +466,9 @@ export async function runBrewUpgrade(config, dryRun, runner = runCommand) {
   if (!update.ok) return { ok: false, failedClosed: true, commands, error: 'brew update failed', upgradedFormulae: [] };
 
   const snapshot = await brewSnapshot(config, runner);
+  if (snapshot.available && snapshot.ok === false) {
+    return { ok: false, failedClosed: true, commands, error: 'brew audit failed before upgrade', upgradedFormulae: [] };
+  }
   const formulae = (snapshot.formulae || []).filter((item) => item.action === 'auto_upgrade_formula').map((item) => item.name);
   if (!formulae.length) {
     if (config.homebrew?.cleanupAfterUpgrade) {
@@ -489,6 +512,9 @@ export function reportMarkdown(report) {
     '## Repo Dependency Audit',
     ...repoLines(report.repoDependencies),
     '',
+    '## Warnings',
+    ...warningLines(report.warnings),
+    '',
     '## Commands',
     ...commandLines(report.commands),
     '',
@@ -501,7 +527,7 @@ export function reportMarkdown(report) {
     `JSON report: ${report.jsonPath}`,
     `Markdown report: ${report.markdownPath}`
   ];
-  return `${lines.join('\n')}\n`;
+  return `${sanitizeText(lines.join('\n'))}\n`;
 }
 
 function homebrewLines(report) {
@@ -512,18 +538,20 @@ function homebrewLines(report) {
   const pinned = before.formulae?.filter((item) => item.action === 'skip_pinned') || [];
   const casks = before.casks || [];
   const upgraded = report.homebrewUpdate?.upgradedFormulae || [];
+  const highImpact = before.formulae?.filter((item) => item.highImpact) || [];
   const lines = [
     `- Outdated formulae before: ${before.formulae?.length || 0}`,
     `- Auto-upgrade candidates: ${auto.length}`,
+    `- High-impact formulae outdated: ${highImpact.length ? highImpact.map((item) => item.name).join(', ') : 'none'}`,
     `- Pinned skipped: ${pinned.length}`,
     `- Casks report-only: ${casks.length}`,
     `- Formulae upgraded/planned: ${upgraded.length ? upgraded.join(', ') : 'none'}`
   ];
   if (after?.available) lines.push(`- Outdated formulae after: ${after.formulae?.length || 0}`);
   if (before.formulae?.length) {
-    lines.push('', '| Formula | Current | Latest | Action |', '| --- | --- | --- | --- |');
+    lines.push('', '| Formula | Current | Latest | High impact | Action |', '| --- | --- | --- | --- | --- |');
     for (const item of before.formulae.slice(0, 30)) {
-      lines.push(`| ${item.name} | ${item.current || 'unknown'} | ${item.latest || 'unknown'} | ${item.action} |`);
+      lines.push(`| ${item.name} | ${item.current || 'unknown'} | ${item.latest || 'unknown'} | ${item.highImpact ? 'yes' : 'no'} | ${item.action} |`);
     }
   }
   return lines;
@@ -563,6 +591,11 @@ function repoLines(repoDependencies) {
   return lines;
 }
 
+function warningLines(warnings = []) {
+  if (!warnings.length) return ['- None.'];
+  return warnings.map((warning) => `- ${warning.scope}: ${warning.message}`);
+}
+
 function commandLines(commands = []) {
   if (!commands.length) return ['- No update commands recorded.'];
   return commands.map((item) => `- ${item.ok ? 'PASS' : 'FAIL'}: \`${[item.command, ...(item.args || [])].join(' ')}\``);
@@ -572,6 +605,7 @@ export function discordSummary(report, token = '') {
   const before = report.before?.homebrew;
   const after = report.after?.homebrew;
   const upgraded = report.homebrewUpdate?.upgradedFormulae || [];
+  const highImpact = before?.formulae?.filter((item) => item.highImpact).map((item) => item.name) || [];
   const repoCount = report.repoDependencies?.repos?.length || 0;
   const repoOutdated = (report.repoDependencies?.repos || []).reduce((sum, repo) => sum + (repo.outdated?.counts?.total || 0), 0);
   const failures = (report.commands || []).filter((item) => !item.ok);
@@ -580,8 +614,11 @@ export function discordSummary(report, token = '') {
     '',
     `Mode: \`${report.mode}${report.dryRun ? ' --dry-run' : ''}\``,
     `Status: \`${report.ok ? 'ok' : 'failed'}\``,
+    `Run status: \`${report.status}\``,
     `Homebrew formulae before/after: \`${before?.formulae?.length ?? 'n/a'}\` -> \`${after?.formulae?.length ?? 'n/a'}\``,
     `Formulae upgraded/planned: \`${upgraded.length ? upgraded.join(', ') : 'none'}\``,
+    `High-impact formulae outdated: \`${highImpact.length ? highImpact.join(', ') : 'none'}\``,
+    `Warnings: \`${report.warnings?.length || 0}\``,
     `Repo dependency audit: \`${repoCount} repos, ${repoOutdated} outdated packages (report-only)\``,
     `Report: \`${report.markdownPath}\``,
     '',
@@ -663,6 +700,54 @@ export async function postDiscordReport(config, report, options = {}) {
   return { posted: true, channelId, messageId: message.id || null, attachmentMessageId: attachment.id || null };
 }
 
+function commandFailureWarnings(scope, commands = {}) {
+  return Object.entries(commands)
+    .filter(([, command]) => command && command.ok === false)
+    .map(([name, command]) => ({
+      scope,
+      message: `${name} command failed: ${[command.command, ...(command.args || [])].join(' ')}`
+    }));
+}
+
+export function collectReportWarnings(report) {
+  const warnings = [];
+  for (const [label, snapshot] of [
+    ['homebrew before audit', report.before?.homebrew],
+    ['homebrew after audit', report.after?.homebrew]
+  ]) {
+    if (!snapshot) continue;
+    if (!snapshot.available) {
+      if (snapshot.reason !== 'disabled') warnings.push({ scope: label, message: snapshot.reason || 'unavailable' });
+      continue;
+    }
+    if (snapshot.ok === false) warnings.push(...commandFailureWarnings(label, snapshot.commands));
+  }
+
+  for (const version of [...(report.before?.cliVersions || []), ...(report.after?.cliVersions || [])]) {
+    if (!version.available) {
+      warnings.push({ scope: 'cli version', message: `${version.name || version.command} unavailable: ${version.reason || 'unknown'}` });
+    } else if (version.ok === false) {
+      warnings.push({ scope: 'cli version', message: `${version.name || version.command} version check failed` });
+    }
+  }
+
+  if (report.globalNpm && !report.globalNpm.available && report.globalNpm.reason !== 'disabled') {
+    warnings.push({ scope: 'global npm', message: report.globalNpm.reason || 'unavailable' });
+  } else if (report.globalNpm?.available && report.globalNpm.command?.ok === false && !report.globalNpm.outdated?.counts?.total) {
+    warnings.push({ scope: 'global npm', message: 'global npm outdated check failed without parseable outdated data' });
+  }
+
+  for (const repo of report.repoDependencies?.repos || []) {
+    if (repo.statusError) warnings.push({ scope: `repo ${repo.name}`, message: `git status failed: ${repo.statusError}` });
+    if (repo.outdated?.available === false) warnings.push({ scope: `repo ${repo.name}`, message: `outdated check unavailable: ${repo.outdated.reason || 'unknown'}` });
+    if (repo.audit?.available === false && !['disabled', 'yarn audit is report-only unsupported in v1 for mixed Yarn versions'].includes(repo.audit.reason)) {
+      warnings.push({ scope: `repo ${repo.name}`, message: `audit unavailable: ${repo.audit.reason || 'unknown'}` });
+    }
+  }
+
+  return warnings;
+}
+
 export async function buildReport(config, mode, dryRun = false, options = {}) {
   if (!['audit', 'update'].includes(mode)) throw new Error(`Unsupported mode: ${mode}`);
   await ensureDirs(config);
@@ -708,8 +793,13 @@ export async function buildReport(config, mode, dryRun = false, options = {}) {
     globalNpm,
     repoDependencies,
     homebrewUpdate,
+    warnings: [],
     commands: homebrewUpdate.commands || []
   };
+  report.warnings = collectReportWarnings(report);
+  report.status = report.ok
+    ? (report.warnings.length ? 'completed_with_warnings' : 'completed')
+    : 'failed';
 
   await writeJson(jsonPath, report);
   await fs.writeFile(markdownPath, reportMarkdown(report), { mode: 0o600 });
