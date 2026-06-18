@@ -7,7 +7,6 @@ The installable Codex payloads live separately under `skills/<name>/`. Install t
 | Skill | Kind | Guide | Installable payload |
 |---|---|---|---|
 | client-requirements-to-plan | Planning intake | [guide](client-requirements-to-plan.md) | [payload](../../skills/client-requirements-to-plan/) |
-| youtube-content-planner | Content workflow | [guide](youtube-content-planner.md) | [payload](../../skills/youtube-content-planner/) |
 | clarify-before-build | Planning gate | [guide](clarify-before-build.md) | [payload](../../skills/clarify-before-build/) |
 | feature-design-preflight | Design gate | [guide](feature-design-preflight.md) | [payload](../../skills/feature-design-preflight/) |
 | user-action-coverage-review | Coverage gate | [guide](user-action-coverage-review.md) | [payload](../../skills/user-action-coverage-review/) |

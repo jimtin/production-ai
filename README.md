@@ -16,7 +16,6 @@ Each skill has two layers:
 | Skill | Kind | Guide | Payload |
 |---|---|---|---|
 | client-requirements-to-plan | Planning intake | [guide](docs/skills/client-requirements-to-plan.md) | [payload](skills/client-requirements-to-plan/) |
-| youtube-content-planner | Content workflow | [guide](docs/skills/youtube-content-planner.md) | [payload](skills/youtube-content-planner/) |
 | clarify-before-build | Planning gate | [guide](docs/skills/clarify-before-build.md) | [payload](skills/clarify-before-build/) |
 | feature-design-preflight | Design gate | [guide](docs/skills/feature-design-preflight.md) | [payload](skills/feature-design-preflight/) |
 | user-action-coverage-review | Coverage gate | [guide](docs/skills/user-action-coverage-review.md) | [payload](skills/user-action-coverage-review/) |
@@ -54,7 +53,7 @@ cd production-ai
 scripts/install-skill.sh clarify-before-build
 ```
 
-Then ask your agent to plan something substantial — the skill triggers on planning requests, or invoke it directly with `$clarify-before-build`. For early client discovery work, install `client-requirements-to-plan` first and use it to turn client notes into a saved plan before the build gates begin. For channel content, install `youtube-content-planner` and turn skills into saved episode artifacts.
+Then ask your agent to plan something substantial — the skill triggers on planning requests, or invoke it directly with `$clarify-before-build`. For early client discovery work, install `client-requirements-to-plan` first and use it to turn client notes into a saved plan before the build gates begin.
 
 Adopt the workspace constitution:
 

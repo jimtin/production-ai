@@ -29,7 +29,6 @@ graph TD
     subgraph Operational
         LCM[laptop-currency-maintenance]
         DDC[docker-disk-cleanup]
-        YCP[youtube-content-planner]
     end
 
     CRP --> CBB
@@ -76,7 +75,7 @@ graph TD
 - **Orchestrators** own a whole engagement or major engagement stage: a client intake plan (`client-requirements-to-plan`), a planning conversation (`clarify-before-build`), a whole-app audit (`full-app-review`), a review-to-deploy pipeline (`pr-production-gate`). They sequence specialists.
 - **Specialist gates** own one dimension — design risk, frontend quality, validation readiness, coverage, removal safety, observability, security — and define what "covered" means for it.
 - **Implementation guides** are domain-specific build recipes that themselves invoke the gates (`nextjs-vercel-analytics` requires a design preflight for nontrivial funnels and a threat-model pass before push).
-- **Operational/content workflows** keep the system usable around the core proof loop: local maintenance, Docker cleanup, and content artifacts.
+- **Operational workflows** keep the system usable around the core proof loop: local maintenance and Docker cleanup.
 
 ## Composition rules
 
