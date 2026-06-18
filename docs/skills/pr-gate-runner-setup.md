@@ -17,7 +17,7 @@ For a new runner host, the skill:
 7. Coordinates conservative Docker cleanup through `docker-disk-cleanup`.
 8. Plans scheduler tasks, healthchecks, maintenance, logs, and readback commands.
 9. Requires at least one closed gate status from the target machine before setup is complete.
-10. Produces a private setup report or sanitized public example using the bundled renderer.
+10. Produces a private setup report or sanitized public example with an explicit proposed fix plan using the bundled renderer.
 
 ## Why public skills come first
 
@@ -47,6 +47,7 @@ The JSON contract lives in `skills/pr-gate-runner-setup/references/report-contra
 
 - **Public bootstrap first.** The runner starts from public skills, not private memory.
 - **Progressive understanding.** Unknowns stay explicit until the host proves them.
+- **Actionable reporting.** Blockers and partial findings become proposed fixes with proof, not just issue lists.
 - **Install from gaps.** The plan installs only what the environment profile shows is missing.
 - **Scheduler context matters.** Manual shell checks are not enough when scheduled jobs resolve different PATH entries, credentials, mounts, or Docker config.
 - **Closed status required.** Installation is not completion. The new runner must produce a closed gate status, even if it is a cheap idle status.

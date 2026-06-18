@@ -25,6 +25,15 @@ test("renders the main setup sections", () => {
         status: "planned",
       },
     ],
+    fixPlan: [
+      {
+        priority: "P1",
+        issue: "Scheduler is missing.",
+        fix: "Install run and healthcheck tasks from the checked-in task installer.",
+        proof: "Task readback shows enabled tasks and the healthcheck exits 0.",
+        status: "planned",
+      },
+    ],
     installPlan: ["Create base runner directories.", "Render config."],
     verification: ["First run exits with a closed status."],
   });
@@ -34,6 +43,9 @@ test("renders the main setup sections", () => {
   assert.match(report, /## Public Skill Bootstrap/);
   assert.match(report, /## Progressive Discovery/);
   assert.match(report, /Public skill baseline/);
+  assert.match(report, /## Proposed Fix Plan/);
+  assert.match(report, /Scheduler is missing/);
+  assert.match(report, /Task readback shows enabled tasks/);
   assert.match(report, /First run exits with a closed status/);
 });
 
@@ -66,4 +78,22 @@ test("escapes markdown table pipes", () => {
   });
 
   assert.match(report, /value A \\\| value B/);
+});
+
+test("renders proposed fix action aliases", () => {
+  const report = renderSetupReport({
+    proposedFixes: [
+      {
+        priority: "P0",
+        issue: "Runtime PATH is nondeterministic.",
+        action: "Prepend the Linux runtime path in the scheduler wrapper.",
+        proof: "Scheduler-context healthcheck resolves the intended runtime.",
+        status: "implemented",
+      },
+    ],
+  });
+
+  assert.match(report, /Runtime PATH is nondeterministic/);
+  assert.match(report, /Prepend the Linux runtime path/);
+  assert.match(report, /Scheduler-context healthcheck/);
 });

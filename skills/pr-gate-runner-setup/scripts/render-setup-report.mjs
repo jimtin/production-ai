@@ -139,6 +139,19 @@ function renderAcceptanceTable(items) {
   ].join("\n");
 }
 
+function renderFixPlanTable(items) {
+  const rows = asArray(items);
+  if (!rows.length) return "None recorded.";
+  return [
+    "| Priority | Issue | Proposed fix | Proof | Status |",
+    "|---|---|---|---|---|",
+    ...rows.map(
+      (row) =>
+        `| ${escapeTable(row.priority)} | ${escapeTable(row.issue)} | ${escapeTable(row.fix || row.action)} | ${escapeTable(row.proof)} | ${escapeTable(row.status)} |`,
+    ),
+  ].join("\n");
+}
+
 export function renderSetupReport(input = {}) {
   const redactors = buildRedactors(input.redactions);
   const data = sanitizeValue(input, redactors);
@@ -173,6 +186,10 @@ export function renderSetupReport(input = {}) {
     "## Acceptance Ledger",
     "",
     renderAcceptanceTable(data.acceptance),
+    "",
+    "## Proposed Fix Plan",
+    "",
+    renderFixPlanTable(data.fixPlan || data.proposedFixes),
     "",
     "## Install Plan",
     "",

@@ -64,6 +64,16 @@
 | Scheduler | Install run, healthcheck, and maintenance tasks. | Scheduler readback shows task names, cadence, working directory, and command. | pending |
 | Closed status | Run first target-machine gate proof. | JSON report shows one closed status such as `no_eligible_prs`, `waiting_on_author`, `rejected`, or `deployed`. | pending |
 
+## Proposed Fix Plan
+
+| Priority | Issue | Proposed fix | Proof | Status |
+|---|---|---|---|---|
+| P0 | Scheduled runs may resolve a host-mounted runtime before the intended Linux runtime. | Add a runner-local runtime normalization helper and source it from gate, healthcheck, and cleanup wrappers. | Scheduler-context healthcheck prints the intended runtime and exits 0. | planned |
+| P0 | Scheduler tasks are missing, so no unattended gate run can occur. | Install run, healthcheck, and maintenance tasks from the checked-in installer. | Scheduler readback shows enabled tasks, cadence, command, user, and background-capable logon mode. | pending |
+| P1 | Candidate controller checkout is stale or dirty. | Back up local state, classify local changes, then sync the approved controller source. | `git status --short` is clean and config validation passes on the target machine. | blocked |
+| P1 | Secret inventory is incomplete for deployment phases. | Render local-only env material from approved secret sources without printing values. | Presence-only secret check confirms required classes and restrictive modes. | pending |
+| P2 | Docker cleanup has not been scoped around active services. | Run audit/report-only cleanup first, then apply only gate-scoped or age-scoped cleanup. | Before/after Docker usage is recorded and active services remain running. | planned |
+
 ## Install Plan
 
 1. Install the public skill library and verify the expected skills are discoverable.

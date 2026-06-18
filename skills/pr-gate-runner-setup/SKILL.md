@@ -21,6 +21,7 @@ This skill does not assume the machine is ready. It turns an unknown host into a
 - Use `$test-readiness-preflight` before expensive validation or the first scheduled run.
 - Use `$security-threat-model` when secrets, scheduler jobs, host trust boundaries, provider credentials, deploy branches, or public docs are touched.
 - Never print secret values. Record only presence, path class, file mode, source of truth, and missing classes.
+- Every blocked or partial discovery finding must become a proposed fix-plan row with priority, action, proof, and status.
 - A new runner is not ready until it produces one closed gate status from the target machine, even if that status is `no_eligible_prs`.
 
 ## Progressive Setup Workflow
@@ -80,7 +81,7 @@ Use `scripts/render-setup-report.mjs` when you have structured discovery data an
 node skills/pr-gate-runner-setup/scripts/render-setup-report.mjs setup-input.json > setup-report.md
 ```
 
-The script accepts JSON shaped by `references/report-contract.md`, applies built-in and caller-provided redactions, and prints a Markdown setup report with environment profile, public skill bootstrap, progressive discovery, acceptance ledger, install plan, Docker cleanup, scheduler, verification, recovery, and open questions.
+The script accepts JSON shaped by `references/report-contract.md`, applies built-in and caller-provided redactions, and prints a Markdown setup report with environment profile, public skill bootstrap, progressive discovery, acceptance ledger, proposed fix plan, install plan, Docker cleanup, scheduler, verification, recovery, and open questions.
 
 ## Completion Blockers
 

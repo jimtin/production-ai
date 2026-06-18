@@ -12,12 +12,13 @@ Every report must include:
 4. **Public skill bootstrap** listing the public skills installed or required before machine-specific work.
 5. **Progressive discovery** for access, host OS, runtime PATH, Docker, disk, Git/provider auth, repo foundation, gate controller, secrets, locks, scheduler, and security.
 6. **Acceptance ledger** mapping requirements to intended changes, proof, status, and blockers.
-7. **Install plan** with ordered steps derived from discovered gaps.
-8. **Docker cleanup plan** including inspection commands, scope, active-service safeguards, and expected retention.
-9. **Scheduler plan** with task names, cadence, working directory, env loader, logs, and readback.
-10. **Verification plan** from public-skill readback through the first closed gate status.
-11. **Recovery plan** naming how to disable tasks, preserve evidence, and recover if setup fails.
-12. **Open questions** only for decisions that cannot be discovered safely.
+7. **Proposed fix plan** turning each blocker or partial finding into a priority, proposed action, proof, and status.
+8. **Install plan** with ordered steps derived from discovered gaps.
+9. **Docker cleanup plan** including inspection commands, scope, active-service safeguards, and expected retention.
+10. **Scheduler plan** with task names, cadence, working directory, env loader, logs, and readback.
+11. **Verification plan** from public-skill readback through the first closed gate status.
+12. **Recovery plan** naming how to disable tasks, preserve evidence, and recover if setup fails.
+13. **Open questions** only for decisions that cannot be discovered safely.
 
 ## Status Vocabulary
 
@@ -99,6 +100,15 @@ Do not include copied provider logs, secret scan findings, raw `.env` files, pri
       "requirement": "Public skill baseline",
       "change": "Install required public skills.",
       "evidence": "Skill install readback lists expected skills.",
+      "status": "planned"
+    }
+  ],
+  "fixPlan": [
+    {
+      "priority": "P1",
+      "issue": "Scheduler tasks are missing.",
+      "fix": "Install run, healthcheck, and maintenance tasks with readback.",
+      "proof": "Task scheduler readback shows enabled tasks and healthcheck exits 0.",
       "status": "planned"
     }
   ],

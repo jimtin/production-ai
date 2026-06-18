@@ -32,6 +32,7 @@
 | Docker cleanup removes unrelated services | Use `$docker-disk-cleanup`, inspect first, preserve active containers, and prefer gate-scoped or age-scoped pruning. |
 | Review containers receive deploy secrets | Keep production credentials out of review lanes; inject deploy credentials only after exact-SHA validation passes. |
 | Public example reveals private infrastructure | Use placeholder hosts, paths, repos, IPs, and report data; scan with the repo privacy tooling. |
+| Proposed fix plan publishes private commands or paths | Treat fix-plan rows as report data: sanitize hostnames, paths, task names, repo slugs, tokens, and provider identifiers before public examples. |
 
 ## Required Security Evidence
 
