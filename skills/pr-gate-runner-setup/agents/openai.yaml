@@ -1,0 +1,4 @@
+interface:
+  display_name: "PR Gate Runner Setup"
+  short_description: "Set up PR gate runner hosts"
+  default_prompt: "Use $pr-gate-runner-setup to set up a new machine as a PR Gate Runner from the public skills."

@@ -28,6 +28,7 @@ Each skill has two layers:
 | repo-technical-documentation | Documentation engine | [guide](docs/skills/repo-technical-documentation.md) | [payload](skills/repo-technical-documentation/) |
 | nextjs-vercel-analytics | Implementation guide | [guide](docs/skills/nextjs-vercel-analytics.md) | [payload](skills/nextjs-vercel-analytics/) |
 | pr-production-gate | Deployment gate | [guide](docs/skills/pr-production-gate.md) | [payload](skills/pr-production-gate/) |
+| pr-gate-runner-setup | Deployment setup | [guide](docs/skills/pr-gate-runner-setup.md) | [payload](skills/pr-gate-runner-setup/) |
 | security-threat-model | Security gate | [guide](docs/skills/security-threat-model.md) | [payload](skills/security-threat-model/) |
 | repo-testing-setup | Foundation gate | [guide](docs/skills/repo-testing-setup.md) | [payload](skills/repo-testing-setup/) |
 | laptop-currency-maintenance | Ops automation | [guide](docs/skills/laptop-currency-maintenance.md) | [payload](skills/laptop-currency-maintenance/) |
@@ -41,6 +42,7 @@ The skills are instances of a small set of system-level patterns, documented in 
 - [The skill graph](docs/skill-graph.md) — skills that invoke skills: orchestrators, specialist gates, and composition rules.
 - [The workspace constitution](docs/workspace-constitution.md) — one `AGENTS.md` that governs every repo in a workspace ([template](templates/AGENTS-workspace-template.md)).
 - [PR production gate](docs/patterns/pr-production-gate.md) — a fail-closed, container-only review-and-deploy train owned by your own machine.
+- [PR gate runner setup example](docs/patterns/pr-gate-runner-setup-report-example.md) — a sanitized structured report for setting up a new gate runner host.
 - [The learning loop](docs/patterns/learning-loop.md) — a nightly automation that mines the agent's own sessions and proposes skill improvements, safely.
 - [Sync and backup](docs/patterns/sync-and-backup.md) — version-controlling your agent configuration with redaction and fail-closed pushes.
 

@@ -19,6 +19,7 @@ The installable Codex payloads live separately under `skills/<name>/`. Install t
 | repo-technical-documentation | Documentation engine | [guide](repo-technical-documentation.md) | [payload](../../skills/repo-technical-documentation/) |
 | nextjs-vercel-analytics | Implementation guide | [guide](nextjs-vercel-analytics.md) | [payload](../../skills/nextjs-vercel-analytics/) |
 | pr-production-gate | Deployment gate | [guide](pr-production-gate.md) | [payload](../../skills/pr-production-gate/) |
+| pr-gate-runner-setup | Deployment setup | [guide](pr-gate-runner-setup.md) | [payload](../../skills/pr-gate-runner-setup/) |
 | security-threat-model | Security gate | [guide](security-threat-model.md) | [payload](../../skills/security-threat-model/) |
 | repo-testing-setup | Foundation gate | [guide](repo-testing-setup.md) | [payload](../../skills/repo-testing-setup/) |
 | laptop-currency-maintenance | Ops automation | [guide](laptop-currency-maintenance.md) | [payload](../../skills/laptop-currency-maintenance/) |

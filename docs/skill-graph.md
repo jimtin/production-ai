@@ -11,6 +11,7 @@ graph TD
         CBB[clarify-before-build]
         FAR[full-app-review]
         PRG[pr-production-gate]
+        PRS[pr-gate-runner-setup]
     end
     subgraph Specialist gates
         FDP[feature-design-preflight]
@@ -57,6 +58,11 @@ graph TD
     PRG --> CPR
     PRG --> STM
     PRG --> RTS
+    PRS --> PRG
+    PRS --> DDC
+    PRS --> TRP
+    PRS --> STM
+    PRS --> RTS
     TRP --> RTS
     RTS --> STM
     CPR --> STM
@@ -73,7 +79,7 @@ graph TD
     LCM --> STM
 ```
 
-- **Orchestrators** own a whole engagement or major engagement stage: a client intake plan (`client-requirements-to-plan`), a planning conversation (`clarify-before-build`), a whole-app audit (`full-app-review`), a review-to-deploy pipeline (`pr-production-gate`). They sequence specialists.
+- **Orchestrators** own a whole engagement or major engagement stage: a client intake plan (`client-requirements-to-plan`), a planning conversation (`clarify-before-build`), a whole-app audit (`full-app-review`), a review-to-deploy pipeline (`pr-production-gate`), or a new runner setup (`pr-gate-runner-setup`). They sequence specialists.
 - **Specialist gates** own one dimension — design risk, frontend quality, validation readiness, coverage, removal safety, observability, security — and define what "covered" means for it.
 - **Implementation guides** are domain-specific build recipes that themselves invoke the gates (`nextjs-vercel-analytics` requires a design preflight for nontrivial funnels and a threat-model pass before push).
 - **Operational/content workflows** keep the system usable around the core proof loop: local maintenance, Docker cleanup, and content artifacts.
