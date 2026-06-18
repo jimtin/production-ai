@@ -13,7 +13,6 @@
 In scope:
 
 - `skills/client-requirements-to-plan/` and `docs/skills/client-requirements-to-plan.md`
-- `skills/youtube-content-planner/` and `docs/skills/youtube-content-planner.md`
 - `docs/content/*-video-breakdown.md` episode explanation documents
 - `skills/laptop-currency-maintenance/` changes, its public guide, and its automation template
 - public index updates in `README.md`, `docs/skills/README.md`, and `docs/skill-graph.md`
@@ -28,7 +27,7 @@ How the system runs and where it is exposed:
 
 - The repo is a public skill library. Users install skill payloads from `skills/<name>/` using `scripts/install-skill.sh` (confirmed: `scripts/validate.sh`, `README.md`).
 - The laptop maintenance skill contains local Node scripts that can run on a developer laptop only after installation and local configuration (confirmed: `skills/laptop-currency-maintenance/SKILL.md`, `scripts/config.example.json`).
-- The YouTube content skill produces Markdown planning documents and explicitly does not upload, schedule, or mutate live channel state (confirmed: `skills/youtube-content-planner/SKILL.md`).
+- Episode explanation documents are public Markdown artifacts and do not upload, schedule, or mutate live channel state (confirmed: `docs/content/*-video-breakdown.md`).
 
 Confidence legend: `confirmed` = file evidence cited, `inferred` = reasonable reading of evidence, `unknown` = not determined from repo evidence.
 
@@ -36,8 +35,8 @@ Confidence legend: `confirmed` = file evidence cited, `inferred` = reasonable re
 
 | Component | Role | Entrypoints | Evidence | Confidence |
 |---|---|---|---|---|
-| Public skill payloads | Agent instructions loaded after skill trigger | `SKILL.md` frontmatter and body | `skills/client-requirements-to-plan/SKILL.md`, `skills/youtube-content-planner/SKILL.md`, `skills/laptop-currency-maintenance/SKILL.md` | confirmed |
-| Public human guides | GitHub-readable explanation and install guidance | Markdown pages under `docs/skills/` | `docs/skills/client-requirements-to-plan.md`, `docs/skills/youtube-content-planner.md`, `docs/skills/laptop-currency-maintenance.md` | confirmed |
+| Public skill payloads | Agent instructions loaded after skill trigger | `SKILL.md` frontmatter and body | `skills/client-requirements-to-plan/SKILL.md`, `skills/laptop-currency-maintenance/SKILL.md` | confirmed |
+| Public human guides | GitHub-readable explanation and install guidance | Markdown pages under `docs/skills/` | `docs/skills/client-requirements-to-plan.md`, `docs/skills/laptop-currency-maintenance.md` | confirmed |
 | Episode explanation documents | Public YouTube planning summaries | Markdown pages under `docs/content/` | `docs/content/client-requirements-to-plan-video-breakdown.md`, `docs/content/docker-disk-cleanup-video-breakdown.md`, `docs/content/laptop-currency-maintenance-video-breakdown.md`, `docs/content/security-threat-model-video-breakdown.md` | confirmed |
 | Laptop maintenance automation | Local host-tooling audit/update runner | `node .../laptop-currency-maintenance.mjs audit|update` | `skills/laptop-currency-maintenance/scripts/laptop-currency-maintenance.mjs`, `skills/laptop-currency-maintenance/scripts/laptop-currency-maintenance-core.mjs` | confirmed |
 | Structural validator | Public package consistency check | `scripts/validate.sh` | `scripts/validate.sh` | confirmed |
@@ -48,7 +47,7 @@ Confidence legend: `confirmed` = file evidence cited, `inferred` = reasonable re
 | Boundary | From -> To | Protections observed (auth, validation, rate limits) | Gaps | Evidence |
 |---|---|---|---|---|
 | Draft/local source -> public repo | Local skill/content drafts -> GitHub-visible Markdown and payloads | Privacy scan, gitleaks, denylist, structural validation | No semantic scanner can prove all client-specific context is absent | `scripts/privacy-scan.sh`, `scripts/validate.sh` |
-| Skill text -> future agent behavior | Public `SKILL.md` instructions -> installed agent workflow | Completion blockers, explicit non-mutation rules, required source reading | A future agent could still ignore skill instructions; mitigated by validation and review, not enforceable in Markdown alone | `skills/youtube-content-planner/SKILL.md`, `skills/client-requirements-to-plan/SKILL.md` |
+| Skill text -> future agent behavior | Public `SKILL.md` instructions -> installed agent workflow | Completion blockers, explicit non-mutation rules, required source reading | A future agent could still ignore skill instructions; mitigated by validation and review, not enforceable in Markdown alone | `skills/client-requirements-to-plan/SKILL.md`, `skills/laptop-currency-maintenance/SKILL.md` |
 | Laptop automation -> host package manager | Installed script -> Homebrew commands | Only unpinned Homebrew formulae are auto-updated; casks and repos are report-only; fail-closed Homebrew audit checks | Homebrew itself remains a trusted upstream | `skills/laptop-currency-maintenance/SKILL.md`, `skills/laptop-currency-maintenance/scripts/laptop-currency-maintenance-core.mjs` |
 | Laptop automation -> report sinks | Command output -> Markdown/JSON/Discord summary | Redaction for tokens, emails, provider IDs, and local home paths; Discord disabled until configured | Redaction patterns may miss a new secret format | `skills/laptop-currency-maintenance/scripts/laptop-currency-maintenance-core.mjs`, `skills/laptop-currency-maintenance/scripts/laptop-currency-maintenance-core.test.mjs` |
 | Public repo -> user installer | Public payload -> user local Codex skills folder | Install path is explicit; config examples are inert until copied and edited | Users can still adapt templates unsafely after installation | `README.md`, `docs/skills/laptop-currency-maintenance.md`, `templates/laptop-currency-maintenance.automation.toml.example` |
@@ -82,17 +81,15 @@ Non-capabilities:
 
 | ID | Attacker goal | Path (entrypoint -> boundary -> asset) | Class | Likelihood | Impact | Priority | Existing controls | Evidence |
 |---|---|---|---|---|---|---|---|---|
-| AP-001 | Harvest private identifiers from public content | Episode docs or skill guides -> draft/local source to public repo -> private client/source details | exfiltration | medium: content was derived from prior work and could accidentally include specifics | medium: leaked private context would be public | medium | Privacy denylist, gitleaks, manual public-safety rules in YouTube skill | `scripts/privacy-scan.sh`, `skills/youtube-content-planner/SKILL.md` |
-| AP-002 | Induce future agents into live channel or Notion mutation | Public YouTube content skill -> skill text to future agent behavior -> live channel/Notion state | integrity | low: skill explicitly forbids upload/schedule/mutation and routes live state elsewhere | medium: incorrect mutation could duplicate or alter publishing state | low | Non-mutation rules, live-state verification rule, completion blockers | `skills/youtube-content-planner/SKILL.md` |
-| AP-003 | Break developer machine or repo state through maintenance automation | Installed laptop skill -> laptop automation to host package manager -> developer machine safety | availability | low: changed logic keeps repo dependencies, casks, global npm, Docker Desktop, and system updates out of auto-update scope | medium: broad updates could disrupt local proof if the boundary regressed | low | Auto-update only unpinned Homebrew formulae, fail-closed Homebrew audit, focused unit tests | `skills/laptop-currency-maintenance/SKILL.md`, `skills/laptop-currency-maintenance/scripts/laptop-currency-maintenance-core.test.mjs` |
-| AP-004 | Leak secrets or local home paths through laptop reports | Command output -> report sink -> Discord/report output | exfiltration | low: sanitizer is tested for token, email, provider ID, and local path patterns | high: a real token leak would be serious | medium | Redaction layer and focused tests; Discord disabled until configured | `skills/laptop-currency-maintenance/scripts/laptop-currency-maintenance-core.mjs`, `skills/laptop-currency-maintenance/scripts/laptop-currency-maintenance-core.test.mjs` |
+| AP-001 | Harvest private identifiers from public content | Episode docs or skill guides -> draft/local source to public repo -> private client/source details | exfiltration | medium: content was derived from prior work and could accidentally include specifics | medium: leaked private context would be public | medium | Privacy denylist and gitleaks | `scripts/privacy-scan.sh` |
+| AP-002 | Break developer machine or repo state through maintenance automation | Installed laptop skill -> laptop automation to host package manager -> developer machine safety | availability | low: changed logic keeps repo dependencies, casks, global npm, Docker Desktop, and system updates out of auto-update scope | medium: broad updates could disrupt local proof if the boundary regressed | low | Auto-update only unpinned Homebrew formulae, fail-closed Homebrew audit, focused unit tests | `skills/laptop-currency-maintenance/SKILL.md`, `skills/laptop-currency-maintenance/scripts/laptop-currency-maintenance-core.test.mjs` |
+| AP-003 | Leak secrets or local home paths through laptop reports | Command output -> report sink -> Discord/report output | exfiltration | low: sanitizer is tested for token, email, provider ID, and local path patterns | high: a real token leak would be serious | medium | Redaction layer and focused tests; Discord disabled until configured | `skills/laptop-currency-maintenance/scripts/laptop-currency-maintenance-core.mjs`, `skills/laptop-currency-maintenance/scripts/laptop-currency-maintenance-core.test.mjs` |
 
 Likelihood/impact notes:
 
 - AP-001 is medium likelihood because public writing often starts from private source material, even when the resulting document is intended to be sanitized.
-- AP-002 is low likelihood because the changed skill repeatedly states that live publishing belongs outside this workflow.
-- AP-003 is low likelihood because tests cover the changed fail-closed and do-not-touch behavior.
-- AP-004 remains medium priority because impact is high if a new secret shape bypasses redaction.
+- AP-002 is low likelihood because tests cover the changed fail-closed and do-not-touch behavior.
+- AP-003 remains medium priority because impact is high if a new secret shape bypasses redaction.
 
 ## 8. Recommended Mitigations
 
@@ -100,9 +97,8 @@ Likelihood/impact notes:
 |---|---|---|---|
 | AP-001 | Run `scripts/privacy-scan.sh` and gitleaks before public push; do not publish if denylist hits remain | public repo push boundary | secret isolation and audit logging |
 | AP-001 | Keep episode examples sanitized and generic unless a future artifact is explicitly private | `docs/content/*-video-breakdown.md` | output redaction |
-| AP-002 | Keep the YouTube content skill as planning-only; route live channel state to a separate live-operations workflow | `skills/youtube-content-planner/SKILL.md` | authorization boundary |
-| AP-003 | Keep focused tests for any change to Homebrew classification, update planning, or report status | `skills/laptop-currency-maintenance/scripts/*test.mjs` | regression testing |
-| AP-004 | Add targeted redaction tests before supporting any new report sink or secret format | `skills/laptop-currency-maintenance/scripts/laptop-currency-maintenance-core.test.mjs` | output redaction |
+| AP-002 | Keep focused tests for any change to Homebrew classification, update planning, or report status | `skills/laptop-currency-maintenance/scripts/*test.mjs` | regression testing |
+| AP-003 | Add targeted redaction tests before supporting any new report sink or secret format | `skills/laptop-currency-maintenance/scripts/laptop-currency-maintenance-core.test.mjs` | output redaction |
 
 ## 9. Assumptions and Open Questions
 
