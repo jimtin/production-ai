@@ -1,0 +1,4 @@
+interface:
+  display_name: "YouTube Content Planner"
+  short_description: "Create YouTube explanation documents"
+  default_prompt: "Use $youtube-content-planner to create and save the YouTube explanation document for this skill."

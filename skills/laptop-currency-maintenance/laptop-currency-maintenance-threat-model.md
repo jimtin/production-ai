@@ -2,13 +2,13 @@
 
 ## Scope
 
-In scope: `~/.codex/automation-tools/laptop-currency-maintenance/`, the `Laptop Currency Maintenance` cron automation, Homebrew formula upgrade behavior, repo dependency audit/report-only behavior, local reports, state files, and Discord reporting.
+In scope: the installable `~/.codex/skills/laptop-currency-maintenance/` payload, the `Laptop Currency Maintenance` scheduled automation, Homebrew formula upgrade behavior, repo dependency audit/report-only behavior, local reports, state files, and Discord reporting.
 
 Out of scope: Homebrew internals, npm/yarn/pnpm registries, macOS software update, App Store updates, Docker Desktop updates, and future repo dependency upgrade implementation work.
 
 ## System Model
 
-- Local cron automation runs `laptop-currency-maintenance.mjs update` from `~/workspace`.
+- Local scheduled automation runs `node ~/.codex/skills/laptop-currency-maintenance/scripts/laptop-currency-maintenance.mjs update`.
 - The tool reads `config.json`, audits Homebrew, global npm, CLI versions, and local repo package metadata.
 - In update mode it runs `brew update`, upgrades only unpinned Homebrew formulae with `brew upgrade --formula ...`, then runs `brew cleanup`.
 - Repo package manifests and lockfiles are not edited; repo dependency output is report-only.
@@ -22,7 +22,7 @@ Out of scope: Homebrew internals, npm/yarn/pnpm registries, macOS software updat
   - Local automation to Homebrew package manager commands.
   - Local automation to npm/yarn/pnpm package metadata commands.
   - Local automation to Discord API.
-  - Local automation to local repos under `~/workspace`.
+  - Local automation to configured workspace repos.
   - Local report files to future learning-loop and guardrails sync processes.
 
 ## Threats
@@ -36,6 +36,7 @@ Out of scope: Homebrew internals, npm/yarn/pnpm registries, macOS software updat
 | Malicious package update compromises host tooling | Low | High | Medium | Updates are limited to Homebrew stable formulae and version proof is captured; this risk remains inherent to trusting Homebrew taps. |
 | Automation causes workstation disruption by upgrading high-impact CLIs daily | Medium | Medium | Medium | Reports include before/after versions and failures; repo dependency changes are not automatic. |
 | Command output overwhelms reports or exposes noisy data | Medium | Low | Low | Command output is truncated in JSON/report summaries; Markdown stays summary-oriented. |
+| Local absolute paths leak through outbound summaries | Medium | Low | Low | Report and Discord text are sanitized to redact local home paths before leaving the process. |
 
 ## Recommendations
 
@@ -43,7 +44,7 @@ Out of scope: Homebrew internals, npm/yarn/pnpm registries, macOS software updat
 - Keep casks and macOS/App Store updates report-only unless a later plan adds approval and rollback handling.
 - Review the first real daily run for CLI disruption, especially `node`, `vercel-cli`, `gh`, `powershell`, and `dotnet`.
 - If Discord reports ever include sensitive output, add a targeted redaction test before the next run.
-- Keep the automation tool in the private guardrails repo so future changes receive validation and gitleaks scanning.
+- Keep changes in this public skill payload covered by focused unit tests, structural validation, privacy scanning, and gitleaks before publishing.
 
 ## Assumptions
 

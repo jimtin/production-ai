@@ -23,7 +23,7 @@ A daily audit-first maintenance pass:
 `scripts/` contains the real implementation (~720 lines + unit tests, run with `node --test`):
 
 - `laptop-currency-maintenance.mjs` — CLI runner: `audit` | `update`, `--dry-run`, `--no-discord`, `--config <path>`.
-- `laptop-currency-maintenance-core.mjs` — the logic: Homebrew classification (unpinned vs. pinned vs. cask), repo scanning with dirty/active detection, report building, and a tested `sanitizeText()` redaction pass over everything that leaves the process.
+- `laptop-currency-maintenance-core.mjs` — the logic: Homebrew classification (unpinned vs. pinned vs. cask), high-impact formula reporting, repo scanning with dirty/active detection, warning aggregation, report building, and a tested `sanitizeText()` redaction pass over everything that leaves the process.
 - `config.example.json` — copy to `config.json` beside the runner; use absolute paths (`~` is not expanded); Discord disabled by default.
 
 ```bash
@@ -40,6 +40,7 @@ node laptop-currency-maintenance.mjs update --dry-run
 - **Repos are read-only territory.** Dependency drift gets *reported with evidence*; mutation requires a human starting a repo-scoped task with the full gate treatment. Machine maintenance never silently becomes repo maintenance.
 - **Dirty/active repo detection.** The repo scan flags repos with uncommitted changes or running dev processes, so even recommendations carry "don't touch this one right now" context.
 - **Redaction before any sink.** Reports and chat posts pass through a tested sanitizer (tokens, bearer headers, provider IDs, emails, secret-shaped assignments) — the same pattern as the [learning loop](../../docs/patterns/learning-loop.md).
+- **Warning status is explicit.** Missing CLIs, failed version checks, unavailable repo audits, and failed Homebrew audit commands produce `completed_with_warnings` instead of hiding inside a nominally successful report.
 - **It ships its own threat model.** [laptop-currency-maintenance-threat-model.md](../../skills/laptop-currency-maintenance/laptop-currency-maintenance-threat-model.md) — an automation that runs daily with your shell and a bot token is attack surface, and is modeled as one.
 
 ## Install
@@ -48,10 +49,10 @@ node laptop-currency-maintenance.mjs update --dry-run
 scripts/install-skill.sh laptop-currency-maintenance
 ```
 
-Schedule the daily run with your harness's automation (see [templates/automation.toml.example](../../templates/automation.toml.example)) or plain cron.
+Schedule the daily run with your harness's automation (see [templates/laptop-currency-maintenance.automation.toml.example](../../templates/laptop-currency-maintenance.automation.toml.example)) or plain cron.
 
 ## Adapt it
 
-- Tune `highImpactFormulae` to the CLIs whose major bumps you want flagged loudly.
+- Tune `highImpactFormulae` to the CLIs whose outdated status you want highlighted in reports.
 - Swap the Discord sink for whatever you read daily — the report is plain Markdown; the sanitizer is the part to keep.
 - If you manage Linux boxes, the Homebrew lane generalizes to apt/dnf with the same pinned/unpinned split — keep the do-not-touch list philosophy intact.

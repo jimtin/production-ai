@@ -7,10 +7,12 @@ import {
   buildReport,
   classifyBrewFormula,
   classifyVersionGap,
+  discordSummary,
   parseBrewOutdated,
   parseNpmAudit,
   parseNpmOutdated,
   parseYarnOutdated,
+  reportMarkdown,
   sanitizeText
 } from './laptop-currency-maintenance-core.mjs';
 
@@ -54,7 +56,9 @@ function makeRunner(root, options = {}) {
   const runner = async (command, args = [], commandOptions = {}) => {
     calls.push({ command, args, cwd: commandOptions.cwd });
     if (command === '/bin/zsh') return ok(command, args, '/usr/bin/mock\n');
-    if (command === 'brew' && args[0] === 'outdated') return ok(command, args, sampleBrewOutdated());
+    if (command === 'brew' && args[0] === 'outdated') {
+      return options.brewOutdatedFails ? fail(command, args, '', 'outdated failed') : ok(command, args, sampleBrewOutdated());
+    }
     if (command === 'brew' && args[0] === 'list' && args[1] === '--pinned') return ok(command, args, 'openssl@3\n');
     if (command === 'brew' && args[0] === 'leaves') return ok(command, args, 'gh\npowershell\nvercel-cli\n');
     if (command === 'brew' && args[0] === 'cleanup' && args[1] === '-n') return ok(command, args, 'Would remove old node\n');
@@ -74,7 +78,9 @@ function makeRunner(root, options = {}) {
     if (command === 'npm' && args[0] === 'audit') {
       return ok(command, args, JSON.stringify({ metadata: { vulnerabilities: { info: 0, low: 0, moderate: 1, high: 0, critical: 0, total: 1 } } }));
     }
-    if (['node', 'npm', 'gh', 'vercel', 'pwsh', 'dotnet', 'gitleaks', 'neonctl'].includes(command)) return ok(command, args, `${command} 1.0.0\n`);
+    if (['node', 'npm', 'gh', 'vercel', 'pwsh', 'dotnet', 'gitleaks', 'neonctl'].includes(command)) {
+      return options.cliVersionFails === command ? fail(command, args, '', `${command} failed`) : ok(command, args, `${command} 1.0.0\n`);
+    }
     return ok(command, args, '');
   };
   runner.calls = calls;
@@ -91,7 +97,7 @@ async function fixtureConfig(root) {
     reportsDir: path.join(root, 'reports'),
     stateDir: path.join(root, 'state'),
     logDir: path.join(root, 'logs'),
-    homebrew: { enabled: true, cleanupAfterUpgrade: true },
+    homebrew: { enabled: true, cleanupAfterUpgrade: true, highImpactFormulae: ['node', 'gitleaks'] },
     repoDependencies: { enabled: true, maxRepos: 10, maxPackagesPerRepo: 10, audit: true },
     globalNpm: { enabled: true },
     cliVersionCommands: [
@@ -125,11 +131,14 @@ test('classifies package version gaps and parses npm/yarn outdated output', () =
 });
 
 test('redaction removes secrets and provider IDs from reports', () => {
-  const text = 'Bearer abc.def.ghi token: supersecret prj_1234567890abcdef user@example.com';
+  const localPath = ['/Users', 'alice', 'workspace', 'app'].join('/');
+  const text = `Bearer abc.def.ghi token: supersecret prj_1234567890abcdef user@example.com ${localPath}`;
   const out = sanitizeText(text);
   assert.equal(out.includes('supersecret'), false);
   assert.equal(out.includes('prj_'), false);
   assert.equal(out.includes('user@example.com'), false);
+  assert.equal(out.includes(localPath), false);
+  assert.equal(out.includes('~/workspace/app'), true);
 });
 
 test('npm audit parser extracts vulnerability counts', () => {
@@ -161,9 +170,26 @@ test('update auto-upgrades only unpinned Homebrew formulae and keeps repos repor
 
   assert.equal(report.ok, true);
   assert.deepEqual(report.homebrewUpdate.upgradedFormulae, ['node', 'powershell']);
+  assert.equal(report.before.homebrew.formulae.find((formula) => formula.name === 'node').highImpact, true);
+  assert.match(reportMarkdown(report), /High-impact formulae outdated: node/);
+  assert.match(discordSummary(report), /High-impact formulae outdated: `node`/);
   assert.deepEqual(upgradeCall.args, ['upgrade', '--formula', 'node', 'powershell']);
   assert.equal(runner.calls.some((call) => call.command === 'npm' && call.args[0] === 'install'), false);
+  assert.equal(runner.calls.some((call) => call.command === 'brew' && call.args.includes('--cask')), false);
   assert.equal(report.repoDependencies.repos[0].recommendation, 'report_only_start_repo_upgrade_task');
+});
+
+test('homebrew audit failure fails closed before formula upgrade', async () => {
+  const root = await tempDir();
+  const config = await fixtureConfig(root);
+  const runner = makeRunner(root, { brewOutdatedFails: true });
+  const report = await buildReport(config, 'update', false, { runner });
+  const commands = runner.calls.map((call) => [call.command, ...call.args].join(' '));
+
+  assert.equal(report.ok, false);
+  assert.equal(report.status, 'failed');
+  assert.equal(report.homebrewUpdate.failedClosed, true);
+  assert.equal(commands.some((cmd) => cmd.startsWith('brew upgrade --formula')), false);
 });
 
 test('failed brew update fails closed before upgrade and cleanup', async () => {
@@ -190,4 +216,17 @@ test('repo audit records dirty and active repos without mutating them', async ()
   assert.equal(repo.dirty, true);
   assert.equal(repo.active, true);
   assert.equal(report.commands.length, 0);
+});
+
+test('audit mode reports warning status when checks fail', async () => {
+  const root = await tempDir();
+  const config = await fixtureConfig(root);
+  config.cliVersionCommands.push({ name: 'gh', command: 'gh', args: ['--version'] });
+  const runner = makeRunner(root, { cliVersionFails: 'gh' });
+  const report = await buildReport(config, 'audit', false, { runner });
+
+  assert.equal(report.ok, true);
+  assert.equal(report.status, 'completed_with_warnings');
+  assert.equal(report.warnings.some((warning) => warning.message.includes('gh version check failed')), true);
+  assert.match(reportMarkdown(report), /## Warnings/);
 });
